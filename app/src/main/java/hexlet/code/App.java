@@ -42,31 +42,40 @@ public class App implements Callable<Integer> {
     private Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
         Map<String, String> diff = new TreeMap<>();
         Iterator<String> fieldNames = json1.fieldNames();
+
         while (fieldNames.hasNext()) {
             String fieldName = fieldNames.next();
+            String path = buildPath(curPath, fieldName);
+
             if (!json2.has(fieldName)) {
-                diff.put(buildPath(curPath, fieldName), "- " + json1.get(fieldName).toString());
+                diff.put("- " + path, json1.get(fieldName).asText());
             } else if (!json1.get(fieldName).equals(json2.get(fieldName))) {
                 if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
                     Map<String, String> nestedDiff = generateDifference(
                             json1.get(fieldName),
                             json2.get(fieldName),
-                            buildPath(curPath, fieldName)
+                            path
                     );
                     diff.putAll(nestedDiff);
                 } else {
-                    diff.put(buildPath(curPath, fieldName), "- " + json1.get(fieldName).toString());
-                    diff.put(buildPath(curPath, fieldName), "+ " + json2.get(fieldName).toString());
+                    diff.put("- " + path, json1.get(fieldName).asText());
+                    diff.put("+ " + path, json2.get(fieldName).asText());
                 }
+            } else {
+                diff.put("  " + path, json1.get(fieldName).asText());
             }
         }
+
         Iterator<String> remainingFieldNames = json2.fieldNames();
         while (remainingFieldNames.hasNext()) {
             String fieldName = remainingFieldNames.next();
+            String path = buildPath(curPath, fieldName);
+
             if (!json1.has(fieldName)) {
-                diff.put(buildPath(curPath, fieldName), "+ " + json2.get(fieldName).toString());
+                diff.put("+ " + path, json2.get(fieldName).asText());
             }
         }
+
         return diff;
     }
 
@@ -78,13 +87,15 @@ public class App implements Callable<Integer> {
     }
 
     private String generateDiffOutput(Map<String, String> diff) {
-        StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder("{\n");
+
         for (Map.Entry<String, String> entry : diff.entrySet()) {
-            output.append(entry.getKey());
+            output.append("  ").append(entry.getKey());
             output.append(": ");
             output.append(entry.getValue());
             output.append("\n");
         }
+        output.append("}\n");
         return output.toString();
     }
 }
