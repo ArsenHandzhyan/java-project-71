@@ -38,7 +38,7 @@ public class App implements Callable<Integer> {
         return 0;
     }
 
-    private Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
+    public static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
         Map<String, String> diff = new TreeMap<>();
         Iterator<String> fieldNames = json1.fieldNames();
 
@@ -78,14 +78,14 @@ public class App implements Callable<Integer> {
         return diff;
     }
 
-    private String buildPath(String curPath, String fieldName) {
+    private static String buildPath(String curPath, String fieldName) {
         if (curPath.isEmpty()) {
             return fieldName;
         }
         return curPath + "." + fieldName;
     }
 
-    private String generateDiffOutput(Map<String, String> diff) {
+    public static String generateDiffOutput(Map<String, String> diff) {
         StringBuilder output = new StringBuilder("{\n");
 
         for (Map.Entry<String, String> entry : diff.entrySet()) {
