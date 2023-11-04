@@ -4,4 +4,4 @@
 <a href="https://codeclimate.com/github/ArsenHandzhyan/java-project-71/test_coverage"><img src="https://api.codeclimate.com/v1/badges/825bb9f7e56f423fd834/test_coverage" /></a>
 # Asciinema 
 [![asciicast](https://asciinema.org/a/ElkPGrCetbq1aLOHsE8HTcbE3.svg)](https://asciinema.org/a/ElkPGrCetbq1aLOHsE8HTcbE3)
-
+[![asciicast](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs.svg)](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs)
