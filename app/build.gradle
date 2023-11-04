@@ -1,7 +1,11 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     id 'application'
     id 'java'
-    id("checkstyle")
+    id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'hexlet.code'
@@ -17,6 +21,9 @@ dependencies {
     implementation 'info.picocli:picocli:4.7.5'
     annotationProcessor 'info.picocli:picocli-codegen:4.7.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.apache.commons:commons-lang3:3.13.0")
 }
 
 
