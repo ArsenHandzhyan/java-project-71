@@ -28,10 +28,6 @@ compileJava {
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
 
-test {
-    useJUnitPlatform()
-}
-
 application {
     mainClass.set("hexlet.code.App")
 }
@@ -42,4 +38,11 @@ compileJava {
 
 checkstyle {
     toolVersion '10.12.1'
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }
