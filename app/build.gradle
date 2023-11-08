@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     id 'application'
     id 'java'
@@ -44,16 +47,20 @@ checkstyle {
     toolVersion '10.12.1'
 }
 
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
+tasks.test {
     useJUnitPlatform()
-}
-jacocoTestReport {
-    reports {
-        xml.required = true
+    // https://technology.lastminute.com/junit5-kotlin-and-gradle-dsl/
+    testLogging {
+        exceptionFormat = TestExceptionFormat.FULL
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+        // showStackTraces = true
+        // showCauses = true
+        showStandardStreams = true
     }
 }
 
-tasks.register('checkstyleAll', Checkstyle) {
-    dependsOn(checkstyleMain, checkstyleTest)
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+    }
 }
