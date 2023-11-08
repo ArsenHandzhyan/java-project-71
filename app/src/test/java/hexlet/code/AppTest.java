@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +23,7 @@ public class AppTest {
 
     static {
         try {
-            filepath1 = getFile("/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/file1.json");
+            filepath1 = getFile("/file1.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -31,7 +33,7 @@ public class AppTest {
 
     static {
         try {
-            filepath2 = getFile("/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/file2.json");
+            filepath2 = getFile("/file2.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -39,12 +41,14 @@ public class AppTest {
 
     public static String diffOutput;
 
-    public static String getFile(String pathFile) throws Exception {
-        Path path = Paths.get(pathFile).toAbsolutePath().normalize();
-        if (!Files.exists(path)) {
-            throw new Exception("File '" + path + "' does not exist");
+    public static String getFile(String resourcePath) throws Exception {
+        try (InputStream is = AppTest.class.getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                throw new FileNotFoundException("File '" + resourcePath + "' not found");
+            }
+            return new BufferedReader(new InputStreamReader(is))
+                    .lines().collect(Collectors.joining("\n"));
         }
-        return Files.readString(path);
     }
 
     @BeforeEach
@@ -119,7 +123,7 @@ public class AppTest {
     @Test
     public void testNonExistentFile() {
         Exception exception = assertThrows(Exception.class, () -> getFile("/path/to/nonexistent/file.json"));
-        String expectedMessage = "File '/path/to/nonexistent/file.json' does not exist";
+        String expectedMessage = "File '/path/to/nonexistent/file.json' not found";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
