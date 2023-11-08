@@ -11,14 +11,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AppTest {
     public static String filepath1;
 
     static {
         try {
-            filepath1 = getFile("/home/arsen/IdeaProjects/java-project-71/app/file1.json");
+            filepath1 = getFile("/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/file1.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -28,7 +31,7 @@ public class AppTest {
 
     static {
         try {
-            filepath2 = getFile("/home/arsen/IdeaProjects/java-project-71/app/file2.json");
+            filepath2 = getFile("/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/file2.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -84,5 +87,112 @@ public class AppTest {
                 """;
         String actual = diffOutput;
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testEmptyFile() throws Exception {
+        String expected = """
+                {
+                - chars1: [a, b, c]
+                - chars2: [d, e, f]
+                - checked: false
+                - default: null
+                - id: 45
+                - key1: value1
+                - numbers1: [1, 2, 3, 4]
+                - numbers2: [2, 3, 4, 5]
+                - numbers3: [3, 4, 5]
+                - setting1: Some value
+                - setting2: 200
+                - setting3: true
+                }
+                """;
+        String emptyFilePath = "{}";
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json1 = mapper.readTree(filepath1);
+        JsonNode jsonEmpty = mapper.readTree(emptyFilePath);
+        Map<String, String> diff = App.generateDifference(json1, jsonEmpty, "");
+        String actual = App.generateDiffOutput(diff);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testNonExistentFile() {
+        Exception exception = assertThrows(Exception.class, () -> getFile("/path/to/nonexistent/file.json"));
+        String expectedMessage = "File '/path/to/nonexistent/file.json' does not exist";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void testSingleKeyValuePair() throws Exception {
+        String singleKvpFilePath = """
+                {
+                  "key1": "value1"
+                }
+                """;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json1 = mapper.readTree(filepath1);
+        JsonNode jsonSingleKvp = mapper.readTree(singleKvpFilePath);
+        Map<String, String> diff = App.generateDifference(json1, jsonSingleKvp, "");
+        assertFalse(diff.isEmpty());
+    }
+
+    @Test
+    public void testArrayValue() throws Exception {
+        String arrayFilePath = """
+                {
+                  "array": [1, 2, 3]
+                }
+                """;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayJson = mapper.readTree(arrayFilePath);
+        String arrayValueOutput = arrayJson.get("array").toString();
+        assertEquals("[1,2,3]", arrayValueOutput);
+    }
+
+    @Test
+    public void testSameFiles() throws Exception {
+        String expected = """
+                {
+                - chars1: [a, b, c]
+                - chars2: [d, e, f]
+                - checked: false
+                - default: null
+                - id: 45
+                  key1: value1
+                - numbers1: [1, 2, 3, 4]
+                - numbers2: [2, 3, 4, 5]
+                - numbers3: [3, 4, 5]
+                - setting1: Some value
+                - setting2: 200
+                - setting3: true
+                }
+                """;
+        String sameFilepath = """
+                {
+                   "key1": "value1"
+                }
+                """;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json1 = mapper.readTree(filepath1);
+        JsonNode jsonSame = mapper.readTree(sameFilepath);
+        Map<String, String> diff = App.generateDifference(json1, jsonSame, "");
+        String actual = App.generateDiffOutput(diff);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCompletelyDifferentFiles() throws Exception {
+        String differentFilepath = """
+                {
+                   "key2": "value2"
+                }
+                """;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json1 = mapper.readTree(filepath1);
+        JsonNode jsonDifferent = mapper.readTree(differentFilepath);
+        Map<String, String> diff = App.generateDifference(json1, jsonDifferent, "");
+        assertFalse(diff.isEmpty());
     }
 }
