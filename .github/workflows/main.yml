@@ -15,7 +15,7 @@ jobs:
           java-version: '20' # assuming Java 17 is the latest version you can use
           distribution: 'temurin'
       - name: Set up Gradle
-        uses: app/gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: build
       - name: Setup executable permissions on gradlew
