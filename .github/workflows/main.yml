@@ -20,14 +20,14 @@ jobs:
       - name: Setup executable permissions on gradlew
         run: chmod +x ./app/gradlew
       - name: Checkstyle
-        run: ./app/gradlew checkstyleMain
+        run: make checkstyleMain
       - name: Run tests
-        run: ./app/gradlew test
+        run: make test
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           JACOCO_SOURCE_PATH: app/src/main/java
         with:
-           coverageCommand: ./app/gradlew jacocoTestReport
+           coverageCommand: make jacocoTestReport
            coverageLocations: ${{github.workspace}}/app/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
