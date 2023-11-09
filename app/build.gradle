@@ -29,25 +29,18 @@ dependencies {
 
 compileJava {
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
-}
-
-test {
-    useJUnitPlatform()
+    options.release.set(20)
 }
 
 application {
     mainClass.set("hexlet.code.App")
 }
 
-compileJava {
-    options.release.set(20)
-}
-
 checkstyle {
     toolVersion '10.12.1'
 }
 
-tasks.test {
+test {
     useJUnitPlatform()
     // https://technology.lastminute.com/junit5-kotlin-and-gradle-dsl/
     testLogging {
@@ -59,7 +52,7 @@ tasks.test {
     }
 }
 
-tasks.jacocoTestReport {
+jacocoTestReport {
     reports {
         xml.required.set(true)
     }
