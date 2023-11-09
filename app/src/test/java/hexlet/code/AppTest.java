@@ -42,7 +42,7 @@ public class AppTest {
     public static String diffOutput;
 
     public static String getFile(String resourcePath) throws Exception {
-        try (InputStream is = AppTest.class.getResourceAsStream(resourcePath)) {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath)) {
             if (is == null) {
                 throw new FileNotFoundException("File '" + resourcePath + "' not found");
             }
@@ -52,12 +52,30 @@ public class AppTest {
     }
 
     @BeforeEach
-    void setUp() throws JsonProcessingException {
+    void setUp() throws JsonProcessingException, FileNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode json1 = mapper.readTree(filepath1);
-        JsonNode json2 = mapper.readTree(filepath2);
-        Map<String, String> diff = App.generateDifference(json1, json2, "");
-        diffOutput = App.generateDiffOutput(diff);
+
+        InputStream inputStream1 = AppTest.class.getResourceAsStream("file1.json");
+        InputStream inputStream2 = AppTest.class.getResourceAsStream("file2.json");
+
+        if (inputStream1 == null) {
+            throw new FileNotFoundException("File '/file1.json' not found");
+        }
+        if (inputStream2 != null) {
+            var fileContent1 = new BufferedReader(new InputStreamReader(inputStream1))
+                    .lines().collect(Collectors.joining("\n"));
+            var fileContent2 = new BufferedReader(new InputStreamReader(inputStream2))
+                    .lines().collect(Collectors.joining("\n"));
+
+            JsonNode json1 = mapper.readTree(fileContent1);
+            JsonNode json2 = mapper.readTree(fileContent2);
+
+            Map<String, String> diff = App.generateDifference(json1, json2, "");
+            diffOutput = App.generateDiffOutput(diff);
+        } else {
+            throw new FileNotFoundException("File '/file2.json' not found");
+        }
+
     }
 
     @Test
@@ -122,7 +140,8 @@ public class AppTest {
 
     @Test
     public void testNonExistentFile() {
-        Exception exception = assertThrows(Exception.class, () -> getFile("/path/to/nonexistent/file.json"));
+        Exception exception = assertThrows(Exception.class, () ->
+                getFile("/path/to/nonexistent/file.json"));
         String expectedMessage = "File '/path/to/nonexistent/file.json' not found";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));

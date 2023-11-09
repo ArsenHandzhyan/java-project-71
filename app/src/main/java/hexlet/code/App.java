@@ -6,9 +6,6 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -23,39 +20,12 @@ import static hexlet.code.StylishFormatter.format;
         description = "Compares two JSON files and shows the differences.")
 
 public class App implements Callable<Integer> {
-    public static String filepath1;
-
-    static {
-        try {
-            filepath1 = getFile("/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/file1.json");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String filepath2;
-
-    static {
-        try {
-            filepath2 = getFile("/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/file2.json");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String getFile(String pathFile) throws Exception {
-        Path path = Paths.get(pathFile).toAbsolutePath().normalize();
-        if (!Files.exists(path)) {
-            throw new Exception("File '" + path + "' does not exist");
-        }
-        return Files.readString(path);
-    }
 
     @CommandLine.Parameters(paramLabel = "file1.json", description = "path to the first JSON file")
-    File filepath11;
+    File filepath1;
 
     @CommandLine.Parameters(paramLabel = "file2.json", description = "path to the second JSON file")
-    File filepath22;
+    File filepath2;
 
     @CommandLine.Option(names = {"-f", "--format"}, description = "Формат вывода [по умолчанию: stylish]")
     String format = "stylish";
