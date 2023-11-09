@@ -17,11 +17,11 @@ jobs:
         with:
           gradle-version: 8.3
       - name: Setup executable permissions on gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./app/gradlew
       - run: ./gradlew checkstyleMain
-        working-directory: .
+        working-directory: ./app
       - run: ./gradlew test
-        working-directory: .
+        working-directory: ./app
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
@@ -29,5 +29,5 @@ jobs:
           JACOCO_SOURCE_PATH: src/main/java
         with:
           coverageCommand: ./gradlew jacocoTestReport
-          workingDirectory: .
+          workingDirectory: ./app
           coverageLocations: build/reports/jacoco/test/jacocoTestReport.xml:jacoco
