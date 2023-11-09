@@ -21,10 +21,10 @@ jobs:
         run: chmod +x ./app/gradlew
       - name: Checkstyle
         run: make lint
-        working-directory: ./
+        working-directory: ./app
       - name: Run tests
         run: make test
-        working-directory: ./
+        working-directory: ./app
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
