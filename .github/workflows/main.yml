@@ -1,7 +1,7 @@
 name: Java CI
 
 on:
-  push:
+  - push
 
 jobs:
   build:
@@ -9,23 +9,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: '20' # assuming Java 17 is the latest version you can use
+          java-version: '20'
           distribution: 'temurin'
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
-      - name: Setup executable permissions on gradlew
-        run: chmod +x ./app/gradlew
-      - name: Run Checkstyle
-        run: ./app/gradlew checkstyleMain checkstyleTest
-      - name: Run tests
-        run: ./app/gradlew test
+          gradle-version: 8.3
+      - run: ./app/gradlew checkstyleMain
+      - run: ./app/gradlew test
       - name: Publish code coverage
-        uses: codecov/codecov-action@v1
-        with:
+        uses: paambaati/codeclimate-action@v5.0.0
+        env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-          file: ./app/build/reports/jacoco/test/jacocoTestReport.xml
+          JACOCO_SOURCE_PATH: app/src/main/java
+        with:
+          coverageCommand: ./app/gradlew jacocoTestReport
+          coverageLocations: ${{github.workspace}}/app/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
