@@ -23,7 +23,7 @@ public class AppTest {
 
     static {
         try {
-            filepath1 = getFile("/file1.json");
+            filepath1 = getFile("file1.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +33,7 @@ public class AppTest {
 
     static {
         try {
-            filepath2 = getFile("/file2.json");
+            filepath2 = getFile("file2.json");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -55,8 +55,8 @@ public class AppTest {
     void setUp() throws JsonProcessingException, FileNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
 
-        InputStream inputStream1 = AppTest.class.getResourceAsStream("file1.json");
-        InputStream inputStream2 = AppTest.class.getResourceAsStream("file2.json");
+        InputStream inputStream1 = AppTest.class.getResourceAsStream("/file1.json");
+        InputStream inputStream2 = AppTest.class.getResourceAsStream("/file2.json");
 
         if (inputStream1 == null) {
             throw new FileNotFoundException("File '/file1.json' not found");
