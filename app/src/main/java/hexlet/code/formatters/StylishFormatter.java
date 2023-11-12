@@ -47,5 +47,4 @@ public class StylishFormatter {
             return node.asText();
         }
     }
-
 }

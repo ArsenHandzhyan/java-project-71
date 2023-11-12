@@ -1,6 +1,6 @@
 package hexlet.code.formatters;
 
-import java.util.*;
+import java.util.LinkedHashMap;
 
 public class PlainFormatter {
     public static String format(String diff) {

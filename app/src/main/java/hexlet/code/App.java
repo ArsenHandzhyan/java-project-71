@@ -36,8 +36,10 @@ public class App implements Callable<Integer> {
 
     @Override
     public Integer call() {
-        JsonNode json1 = parser.parse(filepath1).orElseThrow(() -> new RuntimeException("File cannot be parsed: " + filepath1));
-        JsonNode json2 = parser.parse(filepath2).orElseThrow(() -> new RuntimeException("File cannot be parsed: " + filepath2));
+        JsonNode json1 = parser.parse(filepath1).orElseThrow(() ->
+                new RuntimeException("File cannot be parsed: " + filepath1));
+        JsonNode json2 = parser.parse(filepath2).orElseThrow(() ->
+                new RuntimeException("File cannot be parsed: " + filepath2));
         String diff = Differ.generate(json1, json2, format);
         String formattedDiff = Formatter.formatterSelection(format, diff);
         System.out.println(formattedDiff);
