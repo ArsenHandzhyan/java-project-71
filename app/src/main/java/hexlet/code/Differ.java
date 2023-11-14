@@ -8,13 +8,9 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
 
-import static hexlet.code.formatters.Formatter.formatterSelection;
-
-
 public class Differ {
-    public static String generate(JsonNode json1, JsonNode json2, String format) {
+    public static String generate(JsonNode json1, JsonNode json2) {
         Map<String, String> diff = generateDifference(json1, json2, "");
-        System.out.println(diff);
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
         sortedDiffEntries.sort((entry1, entry2) -> {
             String key1 = entry1.getKey().replaceAll("[^a-zA-Z0-9]", "").trim();
@@ -34,7 +30,7 @@ public class Differ {
             output.append(key).append(": ").append(value).append("\n");
         }
         output.append("}\n");
-        return formatterSelection(format, output.toString());
+        return output.toString();
     }
 
     public static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {

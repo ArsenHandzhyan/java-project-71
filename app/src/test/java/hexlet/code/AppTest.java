@@ -1,117 +1,61 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 import hexlet.code.formatters.Formatter;
 
-import java.util.stream.Collectors;
+import java.io.File;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AppTest {
-    public static String filepath1;
+    public static String diffJson;
+    public static String diffYaml;
+    public static File yaml1;
+    public static File yaml2;
+    public static File json1;
+    public static File json2;
+    public static File jsonEmptyPath;
+    public static File sameFileJsonPath;
+    public static JsonNode sameFileJson;
+    public static JsonNode parsedJson1;
+    public static JsonNode parsedJson2;
+    public static JsonNode parsedYaml1;
+    public static JsonNode parsedYaml2;
+    public static JsonNode jsonEmpty;
 
-
-    static {
-        try {
-            filepath1 = getFile("file1.json");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String filepath2;
-
-    static {
-        try {
-            filepath2 = getFile("file2.json");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String diffOutput;
-
-    public static String getFile(String resourcePath) throws Exception {
-        try (InputStream is = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream(resourcePath)) {
-            if (is == null) {
-                throw new FileNotFoundException("File '" + resourcePath + "' not found");
-            }
-            return new BufferedReader(new InputStreamReader(is))
-                    .lines().collect(Collectors.joining("\n"));
-        }
-    }
-
-    public static String yamlFilepath1;
-    public static String yamlFilepath2;
-
-    public void loadFileContentForYaml(String filePath1, String filePath2) throws Exception {
-        yamlFilepath1 = getFile(filePath1);
-        yamlFilepath2 = getFile(filePath2);
-    }
 
     @BeforeEach
-    void yamlSetUp() throws Exception {
-        loadFileContentForYaml("file1.yaml", "file2.yaml");
-    }
+    void setUp() {
+        Parser parser = new Parser();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-    @BeforeEach
-    void setUp() throws JsonProcessingException, FileNotFoundException {
-        ObjectMapper mapper = new ObjectMapper();
+        json1 = new File(Objects.requireNonNull(loader.getResource("file1.json")).getFile());
+        json2 = new File(Objects.requireNonNull(loader.getResource("file2.json")).getFile());
+        yaml1 = new File(Objects.requireNonNull(loader.getResource("file1.yaml")).getFile());
+        yaml2 = new File(Objects.requireNonNull(loader.getResource("file2.yaml")).getFile());
+        jsonEmptyPath = new File(Objects.requireNonNull(loader.getResource("jsonEmpty.json")).getFile());
+        sameFileJsonPath = new File(Objects.requireNonNull(loader.getResource("sameFile.json")).getFile());
 
-        InputStream inputStream1 = AppTest.class.getResourceAsStream("/file1.json");
-        InputStream inputStream2 = AppTest.class.getResourceAsStream("/file2.json");
+        parsedJson1 = parser.parse(json1).orElseThrow();
+        parsedJson2 = parser.parse(json2).orElseThrow();
+        parsedYaml1 = parser.parse(yaml1).orElseThrow();
+        parsedYaml2 = parser.parse(yaml2).orElseThrow();
+        jsonEmpty = parser.parse(jsonEmptyPath).orElseThrow();
+        sameFileJson = parser.parse(sameFileJsonPath).orElseThrow();
 
-        if (inputStream1 == null) {
-            throw new FileNotFoundException("File '/file1.json' not found");
-        }
-        if (inputStream2 != null) {
-            var fileContent1 = new BufferedReader(new InputStreamReader(inputStream1))
-                    .lines().collect(Collectors.joining("\n"));
-            var fileContent2 = new BufferedReader(new InputStreamReader(inputStream2))
-                    .lines().collect(Collectors.joining("\n"));
-
-            JsonNode json1 = mapper.readTree(fileContent1);
-            JsonNode json2 = mapper.readTree(fileContent2);
-
-            diffOutput = Differ.generate(json1, json2, "plain");
-        } else {
-            throw new FileNotFoundException("File '/file2.json' not found");
-        }
+        diffJson = Differ.generate(parsedJson1, parsedJson2);
+        diffYaml = Differ.generate(parsedYaml1, parsedYaml2);
     }
 
     @Test
-    public void testYamlComparison() throws Exception {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        JsonNode yaml1 = mapper.readTree(yamlFilepath1);
-        JsonNode yaml2 = mapper.readTree(yamlFilepath2);
-        String diff = Differ.generate(yaml1, yaml2, "plain");
-        assertFalse(diff.isEmpty());
-    }
-
-    @Test
-    public void testEmptyYamlComparison() throws Exception {
-        String emptyFilePath = "{}";
-
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        JsonNode yaml1 = mapper.readTree(yamlFilepath1);
-        JsonNode jsonEmpty = mapper.readTree(emptyFilePath);
-        String actual = Differ.generate(yaml1, jsonEmpty, "plain");
-        assertFalse(actual.isEmpty());
+    public void testYamlComparison() {
+        String diffOutputYaml = Formatter.formatterSelection("plain", diffYaml);
+        assertFalse(diffOutputYaml.isEmpty());
     }
 
     @Test
@@ -143,12 +87,12 @@ public class AppTest {
                 + setting3: none
                 }
                 """;
-        String actual = diffOutput;
+        String actual = Formatter.formatterSelection("stylish", diffJson);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testEmptyFile() throws Exception {
+    public void testEmptyFile() {
         String expected = """
                 {
                 - chars1: [a, b, c]
@@ -165,52 +109,21 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-        String emptyFilePath = "{}";
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode json1 = mapper.readTree(filepath1);
-        JsonNode jsonEmpty = mapper.readTree(emptyFilePath);
-        String actual = Differ.generate(json1, jsonEmpty, "plain");
+
+        String diff = Differ.generate(parsedJson1, jsonEmpty);
+        String actual = Formatter.formatterSelection("stylish", diff);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testNonExistentFile() {
-        Exception exception = assertThrows(Exception.class, () ->
-                getFile("/path/to/nonexistent/file.json"));
-        String expectedMessage = "File '/path/to/nonexistent/file.json' not found";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    @Test
-    public void testSingleKeyValuePair() throws Exception {
-        String singleKvpFilePath = """
-                {
-                  "key1": "value1"
-                }
-                """;
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode json1 = mapper.readTree(filepath1);
-        JsonNode jsonSingleKvp = mapper.readTree(singleKvpFilePath);
-        String diff = Differ.generate(json1, jsonSingleKvp, "plain");
+    public void testSingleKeyValuePair() {
+        String diffOut = Differ.generate(parsedJson1, sameFileJson);
+        String diff = Formatter.formatterSelection(diffOut, "plain");
         assertFalse(diff.isEmpty());
     }
 
     @Test
-    public void testArrayValue() throws Exception {
-        String arrayFilePath = """
-                {
-                  "array": [1, 2, 3]
-                }
-                """;
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode arrayJson = mapper.readTree(arrayFilePath);
-        String arrayValueOutput = arrayJson.get("array").toString();
-        assertEquals("[1,2,3]", arrayValueOutput);
-    }
-
-    @Test
-    public void testSameFiles() throws Exception {
+    public void testSameFiles() {
         String expected = """
                 {
                 - chars1: [a, b, c]
@@ -227,15 +140,8 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-        String sameFilepath = """
-                {
-                   "key1": "value1"
-                }
-                """;
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode json1 = mapper.readTree(filepath1);
-        JsonNode jsonSame = mapper.readTree(sameFilepath);
-        String actual = Differ.generate(json1, jsonSame, "plain");
+        String diff = Differ.generate(parsedJson1, sameFileJson);
+        String actual = Formatter.formatterSelection("stylish", diff);
         assertEquals(expected, actual);
     }
 
@@ -247,9 +153,9 @@ public class AppTest {
                 }
                 """;
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode json1 = mapper.readTree(filepath1);
         JsonNode jsonDifferent = mapper.readTree(differentFilepath);
-        String diff = Differ.generate(json1, jsonDifferent, "plain");
+        String diffOut = Differ.generate(parsedJson1, jsonDifferent);
+        String diff = Formatter.formatterSelection(diffOut, "plain");
         assertFalse(diff.isEmpty());
     }
 

@@ -1,8 +1,8 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -12,21 +12,18 @@ import java.util.logging.Logger;
 public class Parser {
     private static final Logger LOGGER = Logger.getLogger(Parser.class.getName());
 
-    private final ObjectMapper yamlMapper;
-    private final ObjectMapper jsonMapper;
-
-    public Parser() {
-        this.yamlMapper = new ObjectMapper(new YAMLFactory());
-        this.jsonMapper = new ObjectMapper();
-    }
 
     public Optional<JsonNode> parse(File file) {
+        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+        ObjectMapper jsonWriter = new ObjectMapper();
         String extension = getFileExtension(file).orElse("");
         try {
             if (extension.equals("json")) {
-                return Optional.of(jsonMapper.readTree(file));
+                return Optional.of(yamlReader.readTree(file));
             } else if (extension.equals("yaml") || extension.equals("yml")) {
-                return Optional.of(yamlMapper.readTree(file));
+                JsonNode jsonNodeTree = yamlReader.readTree(file);
+                String jsonString = jsonWriter.writeValueAsString(jsonNodeTree);
+                return Optional.of(jsonWriter.readTree(jsonString));
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Problem parsing the file", e);

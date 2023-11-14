@@ -3,6 +3,7 @@ package hexlet.code;
 import com.fasterxml.jackson.databind.JsonNode;
 import hexlet.code.formatters.Formatter;
 import picocli.CommandLine;
+
 import java.io.File;
 import java.util.concurrent.Callable;
 
@@ -40,9 +41,10 @@ public class App implements Callable<Integer> {
                 new RuntimeException("File cannot be parsed: " + filepath1));
         JsonNode json2 = parser.parse(filepath2).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath2));
-        String diff = Differ.generate(json1, json2, format);
+        String diff = Differ.generate(json1, json2);
         String formattedDiff = Formatter.formatterSelection(format, diff);
         System.out.println(formattedDiff);
         return 0;
     }
+
 }

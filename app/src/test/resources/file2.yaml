@@ -1,0 +1,12 @@
+name: Bob
+
+age: 30
+
+address:
+  street: "789 Elm St"
+  city: "Los Angeles"
+  state: "CA"
+
+phone:
+  home: "333-333-3333"
+  work: "444-444-4444"
