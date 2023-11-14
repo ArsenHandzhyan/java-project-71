@@ -4,4 +4,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/825bb9f7e56f423fd834/test_coverage)](https://codeclimate.com/github/ArsenHandzhyan/java-project-71/test_coverage)
 # Asciinema 
 [![asciicast](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs.svg)](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs)
-[![asciicast](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs.svg)](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs)
+[![asciicast](https://asciinema.org/a/IwqbjoI41sXeFt2B6q9LSuCOp.svg)](https://asciinema.org/a/IwqbjoI41sXeFt2B6q9LSuCOp)
