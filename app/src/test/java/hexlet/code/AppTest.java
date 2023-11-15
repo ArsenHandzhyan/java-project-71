@@ -47,9 +47,6 @@ public class AppTest {
         parsedYaml2 = parser.parse(yaml2).orElseThrow();
         jsonEmpty = parser.parse(jsonEmptyPath).orElseThrow();
         sameFileJson = parser.parse(sameFileJsonPath).orElseThrow();
-
-        diffJson = Differ.generate(parsedJson1, parsedJson2);
-        diffYaml = Differ.generate(parsedYaml1, parsedYaml2);
     }
 
     @Test
@@ -110,15 +107,13 @@ public class AppTest {
                 }
                 """;
 
-        String diff = Differ.generate(parsedJson1, jsonEmpty);
-        String actual = Formatter.formatterSelection("stylish", diff);
+        String actual = Differ.generate(parsedJson1, jsonEmpty, "stylish");
         assertEquals(expected, actual);
     }
 
     @Test
     public void testSingleKeyValuePair() {
-        String diffOut = Differ.generate(parsedJson1, sameFileJson);
-        String diff = Formatter.formatterSelection(diffOut, "plain");
+        String diff = Differ.generate(parsedJson1, sameFileJson, "plain");
         assertFalse(diff.isEmpty());
     }
 
@@ -140,8 +135,7 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-        String diff = Differ.generate(parsedJson1, sameFileJson);
-        String actual = Formatter.formatterSelection("stylish", diff);
+        String actual = Differ.generate(parsedJson1, sameFileJson, "stylish");
         assertEquals(expected, actual);
     }
 
@@ -154,8 +148,7 @@ public class AppTest {
                 """;
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonDifferent = mapper.readTree(differentFilepath);
-        String diffOut = Differ.generate(parsedJson1, jsonDifferent);
-        String diff = Formatter.formatterSelection(diffOut, "plain");
+        String diff = Differ.generate(parsedJson1, jsonDifferent, "plain");
         assertFalse(diff.isEmpty());
     }
 

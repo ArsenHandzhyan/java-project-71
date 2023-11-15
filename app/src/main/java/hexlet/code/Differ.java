@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import hexlet.code.formatters.Formatter;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Differ {
-    public static String generate(JsonNode json1, JsonNode json2) {
+    public static String generate(JsonNode json1, JsonNode json2, String format) {
         Map<String, String> diff = generateDifference(json1, json2, "");
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
         sortedDiffEntries.sort((entry1, entry2) -> {
@@ -30,7 +31,7 @@ public class Differ {
             output.append(key).append(": ").append(value).append("\n");
         }
         output.append("}\n");
-        return output.toString();
+        return Formatter.formatterSelection(format, output.toString());
     }
 
     public static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
