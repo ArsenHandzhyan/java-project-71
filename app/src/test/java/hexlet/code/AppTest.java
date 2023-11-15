@@ -13,8 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AppTest {
-    public static String diffJson;
-    public static String diffYaml;
     public static File yaml1;
     public static File yaml2;
     public static File json1;
@@ -51,8 +49,9 @@ public class AppTest {
 
     @Test
     public void testYamlComparison() {
-        String diffOutputYaml = Formatter.formatterSelection("plain", diffYaml);
-        assertFalse(diffOutputYaml.isEmpty());
+
+        String actual = Differ.generate(parsedYaml1, parsedYaml2, "stylish");
+        assertFalse(actual.isEmpty());
     }
 
     @Test
@@ -84,7 +83,7 @@ public class AppTest {
                 + setting3: none
                 }
                 """;
-        String actual = Formatter.formatterSelection("stylish", diffJson);
+        String actual = Differ.generate(parsedJson1, parsedJson2, "stylish");
         assertEquals(expected, actual);
     }
 
@@ -113,8 +112,8 @@ public class AppTest {
 
     @Test
     public void testSingleKeyValuePair() {
-        String diff = Differ.generate(parsedJson1, sameFileJson, "plain");
-        assertFalse(diff.isEmpty());
+        String actual = Differ.generate(parsedJson1, sameFileJson, "plain");
+        assertFalse(actual.isEmpty());
     }
 
     @Test
@@ -148,8 +147,8 @@ public class AppTest {
                 """;
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonDifferent = mapper.readTree(differentFilepath);
-        String diff = Differ.generate(parsedJson1, jsonDifferent, "plain");
-        assertFalse(diff.isEmpty());
+        String actual = Differ.generate(parsedJson1, jsonDifferent, "plain");
+        assertFalse(actual.isEmpty());
     }
 
     @Test
