@@ -1,57 +1,38 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import hexlet.code.formatters.Formatter;
-
-import java.io.File;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AppTest {
-    public static File yaml1;
-    public static File yaml2;
-    public static File json1;
-    public static File json2;
-    public static File jsonEmptyPath;
-    public static File sameFileJsonPath;
-    public static JsonNode sameFileJson;
-    public static JsonNode parsedJson1;
-    public static JsonNode parsedJson2;
-    public static JsonNode parsedYaml1;
-    public static JsonNode parsedYaml2;
-    public static JsonNode jsonEmpty;
+    public static String yaml1Path;
+    public static String yaml2Path;
+    public static String json1Path;
+    public static String json2Path;
+    public static String emptyJson;
+    public static String singleKeyJson;
+    public static String jsonDiff;
+    public static String yamlDiff;
+
 
 
     @BeforeEach
     void setUp() {
-        Parser parser = new Parser();
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
-        json1 = new File(Objects.requireNonNull(loader.getResource("file1.json")).getFile());
-        json2 = new File(Objects.requireNonNull(loader.getResource("file2.json")).getFile());
-        yaml1 = new File(Objects.requireNonNull(loader.getResource("file1.yaml")).getFile());
-        yaml2 = new File(Objects.requireNonNull(loader.getResource("file2.yaml")).getFile());
-        jsonEmptyPath = new File(Objects.requireNonNull(loader.getResource("jsonEmpty.json")).getFile());
-        sameFileJsonPath = new File(Objects.requireNonNull(loader.getResource("sameFile.json")).getFile());
-
-        parsedJson1 = parser.parse(json1).orElseThrow();
-        parsedJson2 = parser.parse(json2).orElseThrow();
-        parsedYaml1 = parser.parse(yaml1).orElseThrow();
-        parsedYaml2 = parser.parse(yaml2).orElseThrow();
-        jsonEmpty = parser.parse(jsonEmptyPath).orElseThrow();
-        sameFileJson = parser.parse(sameFileJsonPath).orElseThrow();
+        json1Path = "file1.json";
+        json2Path = "file2.json";
+        yaml1Path = "file1.yaml";
+        yaml2Path = "file2.yaml";
+        emptyJson = "emptyJson.json";
+        singleKeyJson = "singleKeyJson.json";
+        jsonDiff = Differ.generate(json1Path, json2Path, "stylish");
+        yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
     }
 
     @Test
     public void testYamlComparison() {
-
-        String actual = Differ.generate(parsedYaml1, parsedYaml2, "stylish");
-        assertFalse(actual.isEmpty());
+        assertFalse(yamlDiff.isEmpty());
     }
 
     @Test
@@ -83,8 +64,7 @@ public class AppTest {
                 + setting3: none
                 }
                 """;
-        String actual = Differ.generate(parsedJson1, parsedJson2, "stylish");
-        assertEquals(expected, actual);
+        assertEquals(expected, jsonDiff);
     }
 
     @Test
@@ -105,14 +85,13 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-
-        String actual = Differ.generate(parsedJson1, jsonEmpty, "stylish");
+        String actual = Differ.generate(json1Path, emptyJson, "stylish");
         assertEquals(expected, actual);
     }
 
     @Test
     public void testSingleKeyValuePair() {
-        String actual = Differ.generate(parsedJson1, sameFileJson, "plain");
+        String actual = Differ.generate(json1Path, singleKeyJson, "plain");
         assertFalse(actual.isEmpty());
     }
 
@@ -125,7 +104,8 @@ public class AppTest {
                 - checked: false
                 - default: null
                 - id: 45
-                  key1: value1
+                - key1: value1
+                + key2: value2
                 - numbers1: [1, 2, 3, 4]
                 - numbers2: [2, 3, 4, 5]
                 - numbers3: [3, 4, 5]
@@ -134,20 +114,13 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-        String actual = Differ.generate(parsedJson1, sameFileJson, "stylish");
+        String actual = Differ.generate(json1Path, singleKeyJson, "stylish");
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testCompletelyDifferentFiles() throws Exception {
-        String differentFilepath = """
-                {
-                   "key2": "value2"
-                }
-                """;
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonDifferent = mapper.readTree(differentFilepath);
-        String actual = Differ.generate(parsedJson1, jsonDifferent, "plain");
+    public void testCompletelyDifferentFiles() {
+        String actual = Differ.generate(json1Path, singleKeyJson, "plain");
         assertFalse(actual.isEmpty());
     }
 
@@ -168,35 +141,7 @@ public class AppTest {
                 Property 'setting2' was updated. From 200 to 300
                 Property 'setting3' was updated. From true to 'none'
                             """;
-
-        String diff = """
-                {
-                  chars1: ["a","b","c"]
-                - chars2: ["d","e","f"]
-                + chars2: false
-                - checked: false
-                + checked: true
-                - default: null
-                + default: ["value1","value2"]
-                - id: 45
-                + id: null
-                - key1: "value1"
-                + key2: "value2"
-                  numbers1: [1,2,3,4]
-                - numbers2: [2,3,4,5]
-                + numbers2: [22,33,44,55]
-                - numbers3: [3,4,5]
-                + numbers4: [4,5,6]
-                + obj1: {"nestedKey":"value","isNested":true}
-                - setting1: "Some value"
-                + setting1: "Another value"
-                - setting2: 200
-                + setting2: 300
-                - setting3: true
-                + setting3: "none"
-                }
-                """;
-        String actual = Formatter.formatterSelection("plain", diff);
+        String actual = Differ.generate(json1Path, json2Path, "plain");
         assertEquals(expected, actual);
     }
 }

@@ -3,6 +3,7 @@ package hexlet.code;
 import com.fasterxml.jackson.databind.JsonNode;
 import hexlet.code.formatters.Formatter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Iterator;
@@ -10,7 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Differ {
-    public static String generate(JsonNode json1, JsonNode json2, String format) {
+    private final Parser parser;
+
+    public Differ() {
+        this.parser = new Parser();
+    }
+
+    public static String generate(String filepath1, String filepath2, String format) {
+        Differ differ = new Differ(); // Создаем экземпляр Differ
+        JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
+                new RuntimeException("File cannot be parsed: " + filepath1));
+        JsonNode json2 = differ.parser.parse(new File(filepath2)).orElseThrow(() ->
+                new RuntimeException("File cannot be parsed: " + filepath1));
         Map<String, String> diff = generateDifference(json1, json2, "");
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
         sortedDiffEntries.sort((entry1, entry2) -> {
@@ -34,7 +46,7 @@ public class Differ {
         return Formatter.formatterSelection(format, output.toString());
     }
 
-    public static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
+    private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
         Map<String, String> diff = new HashMap<>();
         Iterator<String> fieldNames = json1.fieldNames();
         while (fieldNames.hasNext()) {
