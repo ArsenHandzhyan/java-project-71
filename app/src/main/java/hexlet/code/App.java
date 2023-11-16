@@ -16,7 +16,7 @@ public class App implements Callable<Integer> {
     @CommandLine.Parameters(index = "1", description = "Path to the second file.")
     static String filepath2;
     @CommandLine.Option(names = {"-f", "--format"}, description = "Output format [default: stylish]")
-    static String format = "stylish";
+    static String format;
 
 
     public static void main(String[] args) {
