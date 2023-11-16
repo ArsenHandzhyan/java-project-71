@@ -18,6 +18,9 @@ public class Differ {
     }
 
     public static String generate(String filepath1, String filepath2, String format) {
+        if (format == null) {
+            format = "stylish"; // или любой формат по умолчанию, который вы хотите использовать
+        }
         Differ differ = new Differ();
         JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
