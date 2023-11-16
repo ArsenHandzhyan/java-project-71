@@ -1,7 +1,6 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import hexlet.code.formatters.Formatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +17,7 @@ public class Differ {
         this.parser = new Parser();
     }
 
-    public static String generate(String filepath1, String filepath2, String format) throws IOException {
-        if (format == null) {
-            format = "stylish"; // или любой формат по умолчанию, который вы хотите использовать
-        }
+    public static String generate(String filepath1, String filepath2) throws IOException {
         Differ differ = new Differ();
         JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
@@ -47,7 +43,7 @@ public class Differ {
             output.append("  ").append(key).append(": ").append(value).append("\n");
         }
         output.append("}\n");
-        return Formatter.formatterSelection(format, output.toString());
+        return output.toString();
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {
