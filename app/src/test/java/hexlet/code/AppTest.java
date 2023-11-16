@@ -26,8 +26,8 @@ public class AppTest {
         yaml2Path = "file2.yaml";
         emptyJson = "emptyJson.json";
         singleKeyJson = "singleKeyJson.json";
-        jsonDiff = Differ.generate(json1Path, json2Path);
-        yamlDiff = Differ.generate(yaml1Path, yaml2Path);
+        jsonDiff = Differ.generate(json1Path, json2Path, "stylish");
+        yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
     }
 
     @Test
@@ -64,7 +64,7 @@ public class AppTest {
                 + setting3: none
                 }
                 """;
-        assertEquals(expected, Formatter.formatterSelection("stylish", jsonDiff));
+        assertEquals(expected, jsonDiff);
     }
 
     @Test
@@ -85,13 +85,13 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-        String diff = Differ.generate(json1Path, emptyJson);
-        assertEquals(expected, Formatter.formatterSelection("plain", diff));
+        String actual = Differ.generate(json1Path, emptyJson, "stylish");
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testSingleKeyValuePair() {
-        String actual = Differ.generate(json1Path, singleKeyJson);
+        String actual = Differ.generate(json1Path, singleKeyJson, "plain");
         assertFalse(actual.isEmpty());
     }
 
@@ -114,13 +114,13 @@ public class AppTest {
                 - setting3: true
                 }
                 """;
-        String diff = Differ.generate(json1Path, singleKeyJson);
-        assertEquals(expected, Formatter.formatterSelection("plain", diff));
+        String actual = Differ.generate(json1Path, singleKeyJson, "stylish");
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testCompletelyDifferentFiles() {
-        String actual = Differ.generate(json1Path, singleKeyJson);
+        String actual = Differ.generate(json1Path, singleKeyJson, "plain");
         assertFalse(actual.isEmpty());
     }
 
@@ -141,7 +141,7 @@ public class AppTest {
                 Property 'setting2' was updated. From 200 to 300
                 Property 'setting3' was updated. From true to 'none'
                             """;
-        String diff = Differ.generate(json1Path, json2Path);
-        assertEquals(expected, Formatter.formatterSelection("plain", diff));
+        String actual = Differ.generate(json1Path, json2Path, "plain");
+        assertEquals(expected, actual);
     }
 }

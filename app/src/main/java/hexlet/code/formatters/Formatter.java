@@ -1,8 +1,4 @@
-package hexlet.code;
-
-import hexlet.code.formatters.JsonFormatter;
-import hexlet.code.formatters.PlainFormatter;
-import hexlet.code.formatters.StylishFormatter;
+package hexlet.code.formatters;
 
 public class Formatter {
     public static String formatterSelection(String format, String diff) {

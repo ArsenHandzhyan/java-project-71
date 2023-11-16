@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import hexlet.code.formatters.Formatter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class Differ {
         this.parser = new Parser();
     }
 
-    public static String generate(String filepath1, String filepath2) {
-        Differ differ = new Differ(); // Создаем экземпляр Differ
+    public static String generate(String filepath1, String filepath2, String format) {
+        Differ differ = new Differ();
         JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
         JsonNode json2 = differ.parser.parse(new File(filepath2)).orElseThrow(() ->
@@ -42,7 +43,7 @@ public class Differ {
             output.append(key).append(": ").append(value).append("\n");
         }
         output.append("}\n");
-        return output.toString();
+        return Formatter.formatterSelection(format, output.toString());
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
