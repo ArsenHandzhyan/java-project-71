@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import hexlet.code.formatters.Formatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Iterator;
@@ -17,7 +18,7 @@ public class Differ {
         this.parser = new Parser();
     }
 
-    public static String generate(String filepath1, String filepath2, String format) {
+    public static String generate(String filepath1, String filepath2, String format) throws IOException {
         if (format == null) {
             format = "stylish"; // или любой формат по умолчанию, который вы хотите использовать
         }

@@ -8,33 +8,27 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Parser {
-    private static final Logger LOGGER = Logger.getLogger(Parser.class.getName());
 
-    public Optional<JsonNode> parse(File file) {
+    public Optional<JsonNode> parse(File file) throws IOException {
         ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
         ObjectMapper jsonWriter = new ObjectMapper();
         String extension = getFileExtension(file).orElse("");
-        try {
-            if (extension.equals("json")) {
-                return Optional.of(yamlReader.readTree(file));
-            } else if (extension.equals("yaml") || extension.equals("yml")) {
-                JsonNode jsonNodeTree = yamlReader.readTree(file);
-                if (jsonNodeTree.isArray()) {
-                    ObjectNode newRoot = jsonWriter.createObjectNode();
-                    jsonNodeTree.forEach(node -> newRoot.setAll((ObjectNode) node));
-                    jsonNodeTree = newRoot;
-                }
-                String jsonString = jsonWriter.writeValueAsString(jsonNodeTree);
-                return Optional.of(jsonWriter.readTree(jsonString));
+        JsonNode jsonNodeTree;
+        if (extension.equals("json")) {
+            jsonNodeTree = yamlReader.readTree(file);
+        } else if (extension.equals("yaml") || extension.equals("yml")) {
+            jsonNodeTree = yamlReader.readTree(file);
+            if (jsonNodeTree.isArray()) {
+                ObjectNode newRoot = jsonWriter.createObjectNode();
+                jsonNodeTree.forEach(node -> newRoot.setAll((ObjectNode) node));
+                jsonNodeTree = newRoot;
             }
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Problem parsing the file", e);
+        } else {
+            throw new IllegalArgumentException("Unsupported file type.");
         }
-        return Optional.empty();
+        return Optional.of(jsonNodeTree);
     }
 
     private Optional<String> getFileExtension(File file) {
@@ -43,6 +37,6 @@ public class Parser {
         if (lastIndexOf == -1) {
             return Optional.empty();
         }
-        return Optional.of(name.substring(lastIndexOf + 1));
+        return Optional.of(name.substring(lastIndexOf+1));
     }
 }

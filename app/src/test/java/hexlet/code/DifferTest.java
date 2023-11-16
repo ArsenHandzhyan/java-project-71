@@ -1,12 +1,16 @@
 package hexlet.code;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class AppTest {
+public class DifferTest {
+
     public static String yaml1Path;
     public static String yaml2Path;
     public static String json1Path;
@@ -19,7 +23,7 @@ public class AppTest {
 
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         json1Path = "file1.json";
         json2Path = "file2.json";
         yaml1Path = "file1.yaml";
@@ -68,7 +72,7 @@ public class AppTest {
     }
 
     @Test
-    public void testEmptyFile() {
+    public void testEmptyFile() throws IOException {
         String expected = """
                 {
                 - chars1: [a, b, c]
@@ -90,13 +94,13 @@ public class AppTest {
     }
 
     @Test
-    public void testSingleKeyValuePair() {
+    public void testSingleKeyValuePair() throws IOException {
         String actual = Differ.generate(json1Path, singleKeyJson, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testSameFiles() {
+    public void testSameFiles() throws IOException {
         String expected = """
                 {
                 - chars1: [a, b, c]
@@ -119,13 +123,13 @@ public class AppTest {
     }
 
     @Test
-    public void testCompletelyDifferentFiles() {
+    public void testCompletelyDifferentFiles() throws IOException {
         String actual = Differ.generate(json1Path, singleKeyJson, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testPlainFormat() {
+    public void testPlainFormat() throws IOException {
         String expected = """
                 Property 'chars2' was updated. From [complex value] to false
                 Property 'checked' was updated. From false to true
@@ -143,5 +147,26 @@ public class AppTest {
                             """;
         String actual = Differ.generate(json1Path, json2Path, "plain");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGenerate() {
+        String testFile1 = Paths.get("src", "test", "resources", "file1.json").toString();
+        String testFile2 = Paths.get("src", "test", "resources", "file2.json").toString();
+
+        assertDoesNotThrow(() -> {
+            Differ.generate(testFile1, testFile2, "plain");
+        });
+    }
+
+    @Test
+    public void testGenerateEquals() {
+        String testFile1 = Paths.get("src", "test", "resources", "file1.json").toString();
+
+        assertDoesNotThrow(() -> {
+            String result = Differ.generate(testFile1, testFile1, "plain");
+
+            assertEquals("", result);
+        });
     }
 }
