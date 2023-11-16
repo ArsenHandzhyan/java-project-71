@@ -37,6 +37,6 @@ public class Parser {
         if (lastIndexOf == -1) {
             return Optional.empty();
         }
-        return Optional.of(name.substring(lastIndexOf+1));
+        return Optional.of(name.substring(lastIndexOf + 1));
     }
 }

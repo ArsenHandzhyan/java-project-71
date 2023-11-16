@@ -50,7 +50,7 @@ public class PlainFormatter {
     }
 
     private static String extractProperty(String line) {
-        return line.substring(1, line.indexOf(':')).trim();
+        return line.substring(1, line.indexOf(':')).trim().replaceAll("[^a-zA-Z0-9]", "");
     }
 
     private static String extractValue(String line) {

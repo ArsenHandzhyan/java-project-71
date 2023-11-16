@@ -44,7 +44,7 @@ public class Differ {
         for (Map.Entry<String, String> entry : sortedDiffEntries) {
             String key = entry.getKey();
             String value = entry.getValue();
-            output.append(key).append(": ").append(value).append("\n");
+            output.append("  ").append(key).append(": ").append(value).append("\n");
         }
         output.append("}\n");
         return Formatter.formatterSelection(format, output.toString());
