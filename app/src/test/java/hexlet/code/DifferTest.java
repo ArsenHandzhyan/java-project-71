@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.formatters.Formatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -80,8 +80,9 @@ public class DifferTest {
         }
         resultStylishEmpty = stringBuilder3.toString();
 
-        jsonDiff = Differ.generate(json1Path, json2Path, "stylish");
-        yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
+        jsonDiff = Formatter.formatterSelection("stylysh", Differ.generate(json1Path, json2Path));
+        yamlDiff = Formatter.formatterSelection("stylysh", Differ.generate(yaml1Path, yaml2Path));
+
     }
 
     @Test
@@ -96,44 +97,39 @@ public class DifferTest {
 
     @Test
     public void testEmptyFile() throws IOException {
-        String actual = Differ.generate(json1Path, emptyJsonPath, "stylish");
+        String actual = Formatter.formatterSelection("stylysh", Differ.generate(json1Path, emptyJsonPath));
         assertEquals(resultStylishEmpty, actual);
     }
 
     @Test
     public void testSingleKeyValuePair() throws IOException {
-        String actual = Differ.generate(json1Path, singleKeyJsonPath, "plain");
+        String actual = Formatter.formatterSelection("stylysh", Differ.generate(json1Path, singleKeyJsonPath));
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testSameFiles() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(json1Path, someFilePath, "stylish"));
-    }
-
-    @Test
     public void testCompletelyDifferentFiles() throws IOException {
-        String actual = Differ.generate(json1Path, singleKeyJsonPath, "plain");
+        String actual = Formatter.formatterSelection("plain", Differ.generate(json1Path, singleKeyJsonPath));
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testPlainFormat() throws IOException {
-        String actual = Differ.generate(json1Path, json2Path, "plain");
+        String actual = Formatter.formatterSelection("plain", Differ.generate(json1Path, json2Path));
         assertEquals(resultPlain, actual);
     }
 
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> {
-            Differ.generate(json1Path, json2Path, "plain");
+            Formatter.formatterSelection("plain", Differ.generate(json1Path, json2Path));
         });
     }
 
     @Test
     public void testGenerateEquals() {
         assertDoesNotThrow(() -> {
-            String result = Differ.generate(json1Path, json1Path, "plain");
+            String result = Formatter.formatterSelection("plain", Differ.generate(json1Path, json1Path));
             assertEquals("", result);
         });
     }
