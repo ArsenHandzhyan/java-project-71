@@ -23,7 +23,7 @@ public class Differ {
                 new RuntimeException("File cannot be parsed: " + filepath1));
         JsonNode json2 = differ.parser.parse(new File(filepath2)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
-        Map<String, String> diff = generateDifference(json1, json2, "");
+        Map<String, String> diff = generateDifference(json1, json2);
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
         sortedDiffEntries.sort((entry1, entry2) -> {
             String key1 = entry1.getKey().replaceAll("[^a-zA-Z0-9]", "").trim();
@@ -46,7 +46,8 @@ public class Differ {
         return Formatter.formatterSelection(format, output.toString());
     }
 
-    private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2, String curPath) {
+    private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {
+        String curPath = "";
         Map<String, String> diff = new HashMap<>();
         Iterator<String> fieldNames = json1.fieldNames();
         while (fieldNames.hasNext()) {
@@ -58,8 +59,7 @@ public class Differ {
                 if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
                     Map<String, String> nestedDiff = generateDifference(
                             json1.get(fieldName),
-                            json2.get(fieldName),
-                            path
+                            json2.get(fieldName)
                     );
                     diff.putAll(nestedDiff);
                 } else {
