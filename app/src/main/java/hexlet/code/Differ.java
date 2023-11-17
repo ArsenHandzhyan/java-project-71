@@ -18,6 +18,10 @@ public class Differ {
     }
 
     public static String generate(String filepath1, String filepath2) throws IOException {
+        return generate(filepath1, filepath2, "stylish");
+    }
+
+    public static String generate(String filepath1, String filepath2, String format) throws IOException {
         Differ differ = new Differ();
         JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
