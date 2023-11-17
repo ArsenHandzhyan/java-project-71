@@ -2,6 +2,7 @@ package hexlet.code.formatters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.Formatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +18,6 @@ public class JsonFormatter {
         } catch (JsonProcessingException e) {
             LOGGER.error("Error in processing JSON", e);
         }
-        return jsonOutput.toString();
+        return Formatter.formatterSelection("stylish", jsonOutput.toString());
     }
 }
