@@ -15,38 +15,35 @@ public class StylishFormatter {
     public static String format(String diff) {
         StringBuilder builder = new StringBuilder();
         for (String line : diff.split("\n")) {
-            if (line.startsWith("}")) {
-                line = line.split("}")[0] + "}";
-            }
             Matcher m = p.matcher(line.trim());
             if (m.find()) {
                 String key = m.group(1).trim();
                 String value = m.group(2).trim();
+                if (key.startsWith("}")) {
+                line = line.split("}")[0] + "}";
+                }
                 if (key.startsWith("-") || key.startsWith("+")) {
-                    builder.append("  ").append(key).append(": ").append(formatValue(value));
+                    builder.append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
                 } else {
-                    builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
+                    builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
                 }
-                if (!builder.toString().trim().isEmpty()) {
-                    builder.append("\n");
-                }
-            } else if (!line.trim().isEmpty()) {
+            } else {
                 builder.append(line).append("\n");
             }
         }
         return builder.toString();
     }
 
-    private static String formatValue(String diff) {
+    private static String formatValue(String value) {
         try {
-            JsonNode node = objectMapper.readTree(diff);
+            JsonNode node = objectMapper.readTree(value);
             if (node.isObject() || node.isArray()) {
                 return formatNode(node);
             } else {
                 return node.asText();
             }
         } catch (IOException e) {
-            return diff.trim();
+            return value;
         }
     }
 
