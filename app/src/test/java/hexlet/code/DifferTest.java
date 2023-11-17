@@ -1,6 +1,5 @@
 package hexlet.code;
 
-import hexlet.code.formatters.Formatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -80,8 +79,8 @@ public class DifferTest {
         }
         resultStylishEmpty = stringBuilder3.toString();
 
-        jsonDiff = Formatter.formatterSelection("stylysh", Differ.generate(json1Path, json2Path));
-        yamlDiff = Formatter.formatterSelection("stylysh", Differ.generate(yaml1Path, yaml2Path));
+        jsonDiff = Formatter.formatterSelection("stylish", Differ.generate(json1Path, json2Path));
+        yamlDiff = Formatter.formatterSelection("stylish", Differ.generate(yaml1Path, yaml2Path));
 
     }
 
@@ -97,13 +96,13 @@ public class DifferTest {
 
     @Test
     public void testEmptyFile() throws IOException {
-        String actual = Formatter.formatterSelection("stylysh", Differ.generate(json1Path, emptyJsonPath));
+        String actual = Formatter.formatterSelection("stylish", Differ.generate(json1Path, emptyJsonPath));
         assertEquals(resultStylishEmpty, actual);
     }
 
     @Test
     public void testSingleKeyValuePair() throws IOException {
-        String actual = Formatter.formatterSelection("stylysh", Differ.generate(json1Path, singleKeyJsonPath));
+        String actual = Formatter.formatterSelection("stylish", Differ.generate(json1Path, singleKeyJsonPath));
         assertFalse(actual.isEmpty());
     }
 
