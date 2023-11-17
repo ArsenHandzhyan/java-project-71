@@ -25,10 +25,8 @@ public class StylishFormatter {
                     builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
                 }
             } else {
-                if (key.startsWith("}")) {
                 line = line.split("}")[0] + "}";
-                }
-                builder.append(line).append("\n");
+                builder.append(line);
             }
         }
         return builder.toString();
