@@ -16,6 +16,9 @@ public class StylishFormatter {
         StringBuilder builder = new StringBuilder();
         for (String line : diff.split("\n")) {
             Matcher m = p.matcher(line.trim());
+            if (line.startsWith("}")) {
+                line = line.split("}")[0] + "}";
+            }
             if (m.find()) {
                 String key = m.group(1).trim();
                 String value = m.group(2).trim();
