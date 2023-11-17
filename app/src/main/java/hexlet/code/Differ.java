@@ -47,8 +47,9 @@ public class Differ {
             output.append("  ").append(key).append(": ").append(value).append("\n");
         }
         output.append("}");
-        System.out.println(output);
-        return Formatter.formatterSelection(format, output.toString());
+
+        String trimmedOutput = output.toString().trim();  // Removes any trailing newlines
+        return Formatter.formatterSelection(format, trimmedOutput);  // Pass the trimmed output to the formatter
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {
