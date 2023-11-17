@@ -31,7 +31,7 @@ public class StylishFormatter {
                     builder.append("\n");
                 }
             } else if (!line.trim().isEmpty()) {
-                builder.append(line.split("}")[0] + "}").append("\n");
+                builder.append(line).append("\n");
             }
         }
         return builder.toString();
