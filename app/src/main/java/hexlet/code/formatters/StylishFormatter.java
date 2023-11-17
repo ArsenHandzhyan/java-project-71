@@ -31,7 +31,7 @@ public class StylishFormatter {
                 builder.append(line).append("\n");
             }
         }
-        return builder.toString();
+        return builder.toString().split("}")[0] + "}";
     }
 
     private static String formatValue(String diff) {
