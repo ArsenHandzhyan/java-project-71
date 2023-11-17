@@ -20,27 +20,30 @@ public class StylishFormatter {
                 String key = m.group(1).trim();
                 String value = m.group(2).trim();
                 if (key.startsWith("-") || key.startsWith("+")) {
-                    builder.append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
+                    builder.append("  ").append(key).append(": ").append(formatValue(value));
                 } else {
-                    builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
+                    builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
                 }
-            } else {
+                if (!builder.toString().trim().isEmpty()) {
+                    builder.append("\n");
+                }
+            } else if (!line.trim().isEmpty()) {
                 builder.append(line).append("\n");
             }
         }
         return builder.toString();
     }
 
-    private static String formatValue(String value) {
+    private static String formatValue(String diff) {
         try {
-            JsonNode node = objectMapper.readTree(value);
+            JsonNode node = objectMapper.readTree(diff);
             if (node.isObject() || node.isArray()) {
                 return formatNode(node);
             } else {
                 return node.asText();
             }
         } catch (IOException e) {
-            return value;
+            return diff.trim();
         }
     }
 
