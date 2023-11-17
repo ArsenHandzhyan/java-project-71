@@ -46,7 +46,8 @@ public class Differ {
             String value = entry.getValue();
             output.append("  ").append(key).append(": ").append(value).append("\n");
         }
-        output.append("}\n");
+        output.append("}");
+        System.out.println(output);
         return Formatter.formatterSelection(format, output.toString());
     }
 
