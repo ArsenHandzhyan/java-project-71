@@ -16,18 +16,18 @@ public class StylishFormatter {
         StringBuilder builder = new StringBuilder();
         for (String line : diff.split("\n")) {
             Matcher m = p.matcher(line.trim());
+            String key = m.group(1).trim();
+            String value = m.group(2).trim();
             if (m.find()) {
-                String key = m.group(1).trim();
-                String value = m.group(2).trim();
-                if (key.startsWith("}")) {
-                line = line.split("}")[0] + "}";
-                }
                 if (key.startsWith("-") || key.startsWith("+")) {
                     builder.append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
                 } else {
                     builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value)).append("\n");
                 }
             } else {
+                if (key.startsWith("}")) {
+                line = line.split("}")[0] + "}";
+                }
                 builder.append(line).append("\n");
             }
         }
