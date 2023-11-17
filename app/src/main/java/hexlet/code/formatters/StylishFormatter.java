@@ -28,10 +28,10 @@ public class StylishFormatter {
                     builder.append("\n");
                 }
             } else if (!line.trim().isEmpty()) {
-                builder.append(line).append("\n");
+                builder.append(line).append("\n").split("}")[0] + "}";
             }
         }
-        return builder.toString().split("}")[0] + "}";
+        return builder.toString();
     }
 
     private static String formatValue(String diff) {
