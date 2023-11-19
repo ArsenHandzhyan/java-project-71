@@ -84,18 +84,30 @@ public final class Differ {
         while (fieldNames.hasNext()) {
             String fieldName = fieldNames.next();
             String path = buildPath(curPath, fieldName);
-            if (!json2.has(fieldName)) {
-                diff.put("- " + path, json1.get(fieldName).toString());
-            } else if (!json1.get(fieldName).equals(json2.get(fieldName))) {
-                if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
-                    diff.putAll(generateDifference(json1.get(fieldName), json2.get(fieldName)));
-                } else {
-                    diff.put("- " + path, json1.get(fieldName).toString());
-                    diff.put("+ " + path, json2.get(fieldName).toString());
-                }
+            diff.putAll(processField(json1, json2, fieldName, path));
+        }
+    }
+
+    private static Map<String, String> processField(JsonNode json1, JsonNode json2, String fieldName, String path) {
+        Map<String, String> diff = new HashMap<>();
+        if (!json2.has(fieldName)) {
+            diff.put("- " + path, json1.get(fieldName).toString());
+        } else {
+            putDifferences(json1, json2, fieldName, path, diff);
+        }
+        return diff;
+    }
+
+    private static void putDifferences(JsonNode json1, JsonNode json2, String fieldName, String path, Map<String, String> diff) {
+        if (!json1.get(fieldName).equals(json2.get(fieldName))) {
+            if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
+                diff.putAll(generateDifference(json1.get(fieldName), json2.get(fieldName)));
             } else {
-                diff.put("  " + path, json1.get(fieldName).toString());
+                diff.put("- " + path, json1.get(fieldName).toString());
+                diff.put("+ " + path, json2.get(fieldName).toString());
             }
+        } else {
+            diff.put("  " + path, json1.get(fieldName).toString());
         }
     }
 
