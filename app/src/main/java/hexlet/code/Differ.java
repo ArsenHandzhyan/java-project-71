@@ -2,19 +2,15 @@ package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Map;
 import java.util.List;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 public class Differ {
-    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     private final Parser parser;
 
     public Differ() {
@@ -52,19 +48,7 @@ public class Differ {
         }
         output.append("}");
 
-        String trimmedOutput = output.toString();  // Removes any trailing newlines
-        StringBuilder stringBuilder1 = new StringBuilder(trimmedOutput);
-        try (BufferedReader br = new BufferedReader(Reader.nullReader())) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    stringBuilder1.append(line).append("\n");
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.severe("IOException encountered: " + e);
-        }
-        return Formatter.formatterSelection(format, stringBuilder1.toString());
+        return Formatter.formatterSelection(format, output.toString());
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {

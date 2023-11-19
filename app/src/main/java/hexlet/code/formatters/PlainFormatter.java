@@ -8,21 +8,17 @@ public class PlainFormatter {
         for (int i = 0; i < lines.length; ++i) {
             String line = lines[i].trim();
 
-            if (!line.isEmpty() && !line.contains("{   ") && !line.contains("}   ")) {
-                if (line.startsWith("-")) {
-                    i = handleRemovedProperty(lines, plainFormattedDiff, i);
-                } else if (line.startsWith("+")) { // Added properties
-                    handleAddedProperty(plainFormattedDiff, line);
-                }
+            if (line.isEmpty() || line.contains("{   ") || line.contains("}   ")) {
+                continue;
+            }
+
+            if (line.startsWith("-")) {
+                i = handleRemovedProperty(lines, plainFormattedDiff, i);
+            } else if (line.startsWith("+")) { // Added properties
+                handleAddedProperty(plainFormattedDiff, line);
             }
         }
-        StringBuilder builder1 = new StringBuilder();
-        for (String line : plainFormattedDiff.toString().split("\n")) {
-            if (line.startsWith("Property")) {
-                builder1.append(line).append("\n");
-            }
-        }
-        return builder1.toString();
+        return plainFormattedDiff.toString();
     }
 
     private static int handleRemovedProperty(String[] lines, StringBuilder plainFormattedDiff, int i) {
