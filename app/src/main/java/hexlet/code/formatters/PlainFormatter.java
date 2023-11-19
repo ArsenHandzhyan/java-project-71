@@ -18,6 +18,20 @@ public class PlainFormatter {
                 handleAddedProperty(plainFormattedDiff, line);
             }
         }
+
+        String formattedDiffStr = plainFormattedDiff.toString();
+        String[] formattedDiffLines = formattedDiffStr.split("\n");
+
+        plainFormattedDiff = new StringBuilder();
+        for (String formattedDiffLine : formattedDiffLines) {
+            if (!formattedDiffLine.trim().isEmpty()) {
+                plainFormattedDiff.append(formattedDiffLine).append("\n");
+            }
+        }
+        if (!plainFormattedDiff.isEmpty() && plainFormattedDiff.charAt(plainFormattedDiff.length() - 1) == '\n') {
+            plainFormattedDiff.deleteCharAt(plainFormattedDiff.length() - 1);
+        }
+
         return plainFormattedDiff.toString();
     }
 
