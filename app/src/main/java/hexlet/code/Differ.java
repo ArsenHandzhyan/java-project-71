@@ -69,17 +69,18 @@ public final class Differ {
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {
-        String curPath = "";
         Map<String, String> diff = new HashMap<>();
         Iterator<String> fieldNames = json1.fieldNames();
 
-        processFieldsInJson1(json1, json2, curPath, diff, fieldNames);
-        processFieldsInJson2(json1, json2, curPath, diff, json2.fieldNames());
+        processFieldsInJson1(json1, json2, diff, fieldNames);
+        processFieldsInJson2(json1, json2, diff, json2.fieldNames());
 
         return diff;
     }
 
-    private static void processFieldsInJson1(JsonNode json1, JsonNode json2, String curPath, Map<String, String> diff, Iterator<String> fieldNames) {
+    private static void processFieldsInJson1(JsonNode json1, JsonNode json2, Map<String, String> diff,
+                                             Iterator<String> fieldNames) {
+        String curPath = "";
         while (fieldNames.hasNext()) {
             String fieldName = fieldNames.next();
             String path = buildPath(curPath, fieldName);
@@ -98,7 +99,9 @@ public final class Differ {
         }
     }
 
-    private static void processFieldsInJson2(JsonNode json1, JsonNode json2, String curPath, Map<String, String> diff, Iterator<String> remainingFieldNames) {
+    private static void processFieldsInJson2(JsonNode json1, JsonNode json2, Map<String, String> diff,
+                                             Iterator<String> remainingFieldNames) {
+        String curPath = "";
         while (remainingFieldNames.hasNext()) {
             String fieldName = remainingFieldNames.next();
             String path = buildPath(curPath, fieldName);
