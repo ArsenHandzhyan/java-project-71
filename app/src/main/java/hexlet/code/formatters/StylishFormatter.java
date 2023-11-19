@@ -9,13 +9,13 @@ import java.util.regex.Matcher;
 
 public class StylishFormatter {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final Pattern p = Pattern.compile("^([^:\\[]*):(.+)$", Pattern.DOTALL);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final Pattern P = Pattern.compile("^([^:\\[]*):(.+)$", Pattern.DOTALL);
 
     public static String format(String diff) {
         StringBuilder builder = new StringBuilder();
         for (String line : diff.split("\n")) {
-            Matcher m = p.matcher(line.trim());
+            Matcher m = P.matcher(line.trim());
             if (!line.isEmpty()) {
                 if (m.find()) {
                     String key = m.group(1).trim();
@@ -46,7 +46,7 @@ public class StylishFormatter {
 
     private static String formatValue(String diff) {
         try {
-            JsonNode node = objectMapper.readTree(diff);
+            JsonNode node = OBJECT_MAPPER.readTree(diff);
             if (node.isObject() || node.isArray()) {
                 return formatNode(node);
             } else {

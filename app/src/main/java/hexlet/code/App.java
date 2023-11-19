@@ -40,7 +40,7 @@ public class App implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() throws IOException {
+    public final Integer call() throws IOException {
         String diff = Differ.generate(getFilepath1(), getFilepath2(), getFormat());
         System.out.println(diff);
         return null;
