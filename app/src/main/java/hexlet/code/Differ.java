@@ -27,11 +27,21 @@ public final class Differ {
 
     public static String generate(String filepath1, String filepath2, String format) throws IOException {
         Differ differ = new Differ();
-        JsonNode json1 = differ.getParser().parse(new File(filepath1)).orElseThrow(() ->
-                new RuntimeException("File cannot be parsed: " + filepath1));
-        JsonNode json2 = differ.getParser().parse(new File(filepath2)).orElseThrow(() ->
-                new RuntimeException("File cannot be parsed: " + filepath2));
+        JsonNode json1 = parseJson(filepath1, differ);
+        JsonNode json2 = parseJson(filepath2, differ);
         Map<String, String> diff = generateDifference(json1, json2);
+
+        List<Map.Entry<String, String>> sortedDiffEntries = createSortedList(diff);
+
+        return buildOutputString(sortedDiffEntries, format);
+    }
+
+    private static JsonNode parseJson(String filepath, Differ differ) throws IOException {
+        return differ.getParser().parse(new File(filepath)).orElseThrow(() ->
+                new RuntimeException("File cannot be parsed: " + filepath));
+    }
+
+    private static List<Map.Entry<String, String>> createSortedList(Map<String, String> diff) {
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
         sortedDiffEntries.sort((entry1, entry2) -> {
             String key1 = entry1.getKey().replaceAll("[^a-zA-Z0-9]", "").trim();
@@ -44,6 +54,10 @@ public final class Differ {
             char sign2 = entry2.getKey().charAt(0);
             return Character.compare(sign2, sign1);
         });
+        return sortedDiffEntries;
+    }
+
+    private static String buildOutputString(List<Map.Entry<String, String>> sortedDiffEntries, String format) {
         StringBuilder output = new StringBuilder("{\n");
         for (Map.Entry<String, String> entry : sortedDiffEntries) {
             String key = entry.getKey();
@@ -51,7 +65,6 @@ public final class Differ {
             output.append("  ").append(key).append(": ").append(value).append("\n");
         }
         output.append("}");
-
         return Formatter.formatterSelection(format, output.toString());
     }
 
@@ -59,6 +72,14 @@ public final class Differ {
         String curPath = "";
         Map<String, String> diff = new HashMap<>();
         Iterator<String> fieldNames = json1.fieldNames();
+
+        processFieldsInJson1(json1, json2, curPath, diff, fieldNames);
+        processFieldsInJson2(json1, json2, curPath, diff, json2.fieldNames());
+
+        return diff;
+    }
+
+    private static void processFieldsInJson1(JsonNode json1, JsonNode json2, String curPath, Map<String, String> diff, Iterator<String> fieldNames) {
         while (fieldNames.hasNext()) {
             String fieldName = fieldNames.next();
             String path = buildPath(curPath, fieldName);
@@ -66,11 +87,7 @@ public final class Differ {
                 diff.put("- " + path, json1.get(fieldName).toString());
             } else if (!json1.get(fieldName).equals(json2.get(fieldName))) {
                 if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
-                    Map<String, String> nestedDiff = generateDifference(
-                            json1.get(fieldName),
-                            json2.get(fieldName)
-                    );
-                    diff.putAll(nestedDiff);
+                    diff.putAll(generateDifference(json1.get(fieldName), json2.get(fieldName)));
                 } else {
                     diff.put("- " + path, json1.get(fieldName).toString());
                     diff.put("+ " + path, json2.get(fieldName).toString());
@@ -79,7 +96,9 @@ public final class Differ {
                 diff.put("  " + path, json1.get(fieldName).toString());
             }
         }
-        Iterator<String> remainingFieldNames = json2.fieldNames();
+    }
+
+    private static void processFieldsInJson2(JsonNode json1, JsonNode json2, String curPath, Map<String, String> diff, Iterator<String> remainingFieldNames) {
         while (remainingFieldNames.hasNext()) {
             String fieldName = remainingFieldNames.next();
             String path = buildPath(curPath, fieldName);
@@ -87,7 +106,6 @@ public final class Differ {
                 diff.put("+ " + path, json2.get(fieldName).toString());
             }
         }
-        return diff;
     }
 
     private static String buildPath(String curPath, String fieldName) {

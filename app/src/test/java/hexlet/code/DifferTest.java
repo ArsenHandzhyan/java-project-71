@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 
+import static hexlet.code.Differ.generate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,8 +40,8 @@ public final class DifferTest {
         resultStylish = Files.readString(Paths.get(resultStylishPath));
         resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
 
-        jsonDiff = Differ.generate(JSON_1_PATH, JSON_2_PATH, "stylish");
-        yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
+        jsonDiff = generate(JSON_1_PATH, JSON_2_PATH, "stylish");
+        yamlDiff = generate(yaml1Path, yaml2Path, "stylish");
     }
 
     @Test
@@ -55,43 +56,43 @@ public final class DifferTest {
 
     @Test
     public void testEmptyFile() throws IOException {
-        String actual = Differ.generate(JSON_1_PATH, EMPTY_JSON_PATH, "stylish");
+        String actual = generate(JSON_1_PATH, EMPTY_JSON_PATH, "stylish");
         assertEquals(resultStylishEmpty, actual);
     }
 
     @Test
     public void testTwoArguments() throws IOException {
-        String actual = Differ.generate(JSON_1_PATH, JSON_2_PATH);
+        String actual = generate(JSON_1_PATH, JSON_2_PATH);
         assertEquals(resultStylish, actual);
     }
 
     @Test
     public void testEmptyPath() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(JSON_1_PATH, EMPTY_PATH, "stylish"));
+        assertThrows(IllegalArgumentException.class, () -> generate(JSON_1_PATH, EMPTY_PATH, "stylish"));
     }
 
     @Test
     public void testSingleKeyValuePair() throws IOException {
-        String actual = Differ.generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
+        String actual = generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testCompletelyDifferentFiles() throws IOException {
-        String actual = Differ.generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
+        String actual = generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testPlainFormat() throws IOException {
-        String actual = Differ.generate(JSON_1_PATH, JSON_2_PATH, "plain");
+        String actual = generate(JSON_1_PATH, JSON_2_PATH, "plain");
         assertEquals(resultPlain, actual);
     }
 
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> {
-            Differ.generate(JSON_1_PATH, JSON_2_PATH, "plain");
+            generate(JSON_1_PATH, JSON_2_PATH, "plain");
         });
     }
 }
