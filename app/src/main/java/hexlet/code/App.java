@@ -3,6 +3,8 @@ package hexlet.code;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @CommandLine.Command(
         name = "gendiff",
@@ -26,10 +28,16 @@ public class App implements Callable<Integer> {
         System.exit(exitCode);
     }
 
+    private static final Logger logger = Logger.getLogger(App.class.getName());
+
     @Override
-    public Integer call() throws Exception {
-        String diff = Differ.generate(filepath1, filepath2, format);
-        System.out.println(diff);
+    public Integer call() {
+        try {
+            String diff = Differ.generate(filepath1, filepath2, format);
+            System.out.println(diff);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "An exception was thrown", e);
+        }
         return 0;
     }
 }

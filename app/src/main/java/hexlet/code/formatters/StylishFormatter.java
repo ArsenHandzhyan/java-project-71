@@ -16,22 +16,32 @@ public class StylishFormatter {
         StringBuilder builder = new StringBuilder();
         for (String line : diff.split("\n")) {
             Matcher m = p.matcher(line.trim());
-            if (m.find()) {
-                String key = m.group(1).trim();
-                String value = m.group(2).trim();
-                if (key.startsWith("-") || key.startsWith("+")) {
-                    builder.append("  ").append(key).append(": ").append(formatValue(value));
-                } else {
-                    builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
+            if (!line.isEmpty()) {
+                if (m.find()) {
+                    String key = m.group(1).trim();
+                    String value = m.group(2).trim();
+                    if (key.startsWith("-") || key.startsWith("+")) {
+                        builder.append("  ").append(key).append(": ").append(formatValue(value));
+                    } else {
+                        builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
+                    }
+                    if (!builder.toString().trim().isEmpty()) {
+                        builder.append("\n");
+                    }
+                } else if (!line.trim().isEmpty()) {
+                    builder.append(line).append("\n");
                 }
-                if (!builder.toString().trim().isEmpty()) {
-                    builder.append("\n");
-                }
-            } else if (!line.trim().isEmpty()) {
-                builder.append(line).append("\n");
             }
         }
-        return builder.toString();
+        StringBuilder builder1 = new StringBuilder();
+        for (String line : builder.toString().split("\n")){
+            if (!line.startsWith("}") && !line.isEmpty()) {
+                builder1.append(line).append("\n");
+            } else if (line.startsWith("}")) {
+                builder1.append(line).append("\n");
+            }
+        }
+        return builder1.toString();
     }
 
     private static String formatValue(String diff) {

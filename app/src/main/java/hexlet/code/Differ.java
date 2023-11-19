@@ -1,16 +1,21 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.Reader;
 import java.util.Map;
+import java.util.List;
 import java.util.Iterator;
 import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Differ {
+    private static final Logger logger = LogManager.getLogger(Differ.class);
     private final Parser parser;
 
     public Differ() {
@@ -48,8 +53,19 @@ public class Differ {
         }
         output.append("}");
 
-        String trimmedOutput = output.toString().trim();  // Removes any trailing newlines
-        return Formatter.formatterSelection(format, trimmedOutput);  // Pass the trimmed output to the formatter
+        String trimmedOutput = output.toString();  // Removes any trailing newlines
+        StringBuilder stringBuilder1 = new StringBuilder(trimmedOutput);
+        try (BufferedReader br = new BufferedReader(Reader.nullReader())) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    stringBuilder1.append(line).append("\n");
+                }
+            }
+        } catch (IOException e) {
+            logger.error("IOException encountered", e);
+        }
+        return Formatter.formatterSelection(format, stringBuilder1.toString());  // Pass the trimmed output to the formatter
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {

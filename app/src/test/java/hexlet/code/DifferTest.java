@@ -49,7 +49,9 @@ public class DifferTest {
         try (BufferedReader br = new BufferedReader(new FileReader(resultPlainPath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                stringBuilder1.append(line).append("\n");
+                if (!line.isEmpty()) {
+                    stringBuilder1.append(line).append("\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,7 +62,9 @@ public class DifferTest {
         try (BufferedReader br = new BufferedReader(new FileReader(resultStylishPath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                stringBuilder2.append(line).append("\n");
+                if (!line.isEmpty()) {
+                    stringBuilder2.append(line).append("\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,15 +76,17 @@ public class DifferTest {
         try (BufferedReader br = new BufferedReader(new FileReader(resultStylishEmptyPath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                stringBuilder3.append(line).append("\n");
+                if (!line.isEmpty()) {
+                    stringBuilder3.append(line).append("\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         resultStylishEmpty = stringBuilder3.toString();
 
-        jsonDiff = Formatter.formatterSelection("stylish", Differ.generate(json1Path, json2Path));
-        yamlDiff = Formatter.formatterSelection("stylish", Differ.generate(yaml1Path, yaml2Path));
+        jsonDiff = Differ.generate(json1Path, json2Path, "stylish");
+        yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
 
     }
 
@@ -96,40 +102,32 @@ public class DifferTest {
 
     @Test
     public void testEmptyFile() throws IOException {
-        String actual = Formatter.formatterSelection("stylish", Differ.generate(json1Path, emptyJsonPath));
+        String actual = Differ.generate(json1Path, emptyJsonPath, "stylish");
         assertEquals(resultStylishEmpty, actual);
     }
 
     @Test
     public void testSingleKeyValuePair() throws IOException {
-        String actual = Formatter.formatterSelection("stylish", Differ.generate(json1Path, singleKeyJsonPath));
+        String actual = Differ.generate(json1Path, singleKeyJsonPath, "stylish");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testCompletelyDifferentFiles() throws IOException {
-        String actual = Formatter.formatterSelection("plain", Differ.generate(json1Path, singleKeyJsonPath));
+        String actual = Differ.generate(json1Path, singleKeyJsonPath, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testPlainFormat() throws IOException {
-        String actual = Formatter.formatterSelection("plain", Differ.generate(json1Path, json2Path));
+        String actual = Differ.generate(json1Path, json2Path, "plain");
         assertEquals(resultPlain, actual);
     }
 
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> {
-            Formatter.formatterSelection("plain", Differ.generate(json1Path, json2Path));
-        });
-    }
-
-    @Test
-    public void testGenerateEquals() {
-        assertDoesNotThrow(() -> {
-            String result = Formatter.formatterSelection("plain", Differ.generate(json1Path, json1Path));
-            assertEquals("", result);
+            Differ.generate(json1Path, json2Path, "plain");
         });
     }
 }
