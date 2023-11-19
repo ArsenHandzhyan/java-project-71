@@ -38,7 +38,7 @@ public class StylishFormatter {
             if (!line.startsWith("}") && !line.isEmpty()) {
                 builder1.append(line).append("\n");
             } else if (line.startsWith("}")) {
-                builder1.append(line).append("\n");
+                builder1.append(line);
             }
         }
         return builder1.toString();
