@@ -3,91 +3,47 @@ package hexlet.code;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DifferTest {
+public final class DifferTest {
 
-    public static String yaml1Path;
-    public static String yaml2Path;
-    public static String json1Path;
-    public static String json2Path;
-    public static String someFilePath;
-    public static String resultPlainPath;
-    public static String resultStylishPath;
-    public static String resultStylishEmptyPath;
-    public static String emptyJsonPath;
-    public static String singleKeyJsonPath;
+    private static String json1Path;
+    private static String json2Path;
+    private static String emptyJsonPath;
+    private static String singleKeyJsonPath;
+    private static String emptyPath;
 
-    public static String resultPlain;
-    public static String resultStylish;
-    public static String resultStylishEmpty;
+    private static String resultPlain;
+    private static String resultStylish;
+    private static String resultStylishEmpty;
 
     public static String jsonDiff;
     public static String yamlDiff;
 
     @BeforeEach
-    void setUp() throws IOException {
+    public void setUp() throws IOException {
+        String yaml1Path = "src/test/resources/fixtures/file1.yml";
+        String yaml2Path = "src/test/resources/fixtures/file2.yml";
+
         json1Path = "src/test/resources/fixtures/file1.json";
         json2Path = "src/test/resources/fixtures/file2.json";
-        yaml1Path = "src/test/resources/fixtures/file1.yml";
-        yaml2Path = "src/test/resources/fixtures/file2.yml";
         emptyJsonPath = "src/test/resources/fixtures/emptyJson.json";
         singleKeyJsonPath = "src/test/resources/fixtures/singleKeyJson.json";
-        someFilePath = "src/test/resources/fixtures/sameFile.txt";
-        resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
-        resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
-        resultStylishEmptyPath = "src/test/resources/fixtures/result_stylish_withEmptyFile.txt";
+        emptyPath = "";
+        String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
+        String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
+        String resultStylishEmptyPath = "src/test/resources/fixtures/result_stylish_withEmptyFile.txt";
 
-
-        StringBuilder stringBuilder1 = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(resultPlainPath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    stringBuilder1.append(line).append("\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        resultPlain = stringBuilder1.toString();
-
-        StringBuilder stringBuilder2 = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(resultStylishPath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    stringBuilder2.append(line).append("\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        resultStylish = stringBuilder2.toString();
-
-
-        StringBuilder stringBuilder3 = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(resultStylishEmptyPath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    stringBuilder3.append(line).append("\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        resultStylishEmpty = stringBuilder3.toString();
+        resultPlain = Files.readString(Paths.get(resultPlainPath));
+        resultStylish = Files.readString(Paths.get(resultStylishPath));
+        resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
 
         jsonDiff = Differ.generate(json1Path, json2Path, "stylish");
         yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
-
     }
 
     @Test
@@ -104,6 +60,11 @@ public class DifferTest {
     public void testEmptyFile() throws IOException {
         String actual = Differ.generate(json1Path, emptyJsonPath, "stylish");
         assertEquals(resultStylishEmpty, actual);
+    }
+
+    @Test
+    public void testEmptyPath() {
+        assertThrows(IllegalArgumentException.class, () -> Differ.generate(json1Path, emptyPath, "stylish"));
     }
 
     @Test

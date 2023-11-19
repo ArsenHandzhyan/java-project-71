@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class Differ {
-    private final Parser parser;
+    final Parser parser;
 
     public Differ() {
         this.parser = new Parser();
@@ -26,7 +26,7 @@ public class Differ {
         JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
         JsonNode json2 = differ.parser.parse(new File(filepath2)).orElseThrow(() ->
-                new RuntimeException("File cannot be parsed: " + filepath1));
+                new RuntimeException("File cannot be parsed: " + filepath2));
         Map<String, String> diff = generateDifference(json1, json2);
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
         sortedDiffEntries.sort((entry1, entry2) -> {
