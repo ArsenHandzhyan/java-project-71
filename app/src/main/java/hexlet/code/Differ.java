@@ -17,7 +17,7 @@ public class Differ {
         this.parser = new Parser();
     }
 
-    public Parser getParser() {
+    Parser getParser() {
         return this.parser;
     }
 
