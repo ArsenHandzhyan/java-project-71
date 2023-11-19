@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public final class DifferTest {
 
-    private static final String json1Path = "src/test/resources/fixtures/file1.json";
-    private static final String json2Path = "src/test/resources/fixtures/file2.json";
-    private static final String emptyJsonPath = "src/test/resources/fixtures/emptyJson.json";
-    private static final String singleKeyJsonPath = "src/test/resources/fixtures/singleKeyJson.json";
-    private static final String emptyPath = "";
+    private static final String JSON_1_PATH = "src/test/resources/fixtures/file1.json";
+    private static final String JSON_2_PATH = "src/test/resources/fixtures/file2.json";
+    private static final String EMPTY_JSON_PATH = "src/test/resources/fixtures/emptyJson.json";
+    private static final String SINGLE_KEY_JSON_PATH = "src/test/resources/fixtures/singleKeyJson.json";
+    private static final String EMPTY_PATH = "";
 
     private static String resultPlain;
     private static String resultStylish;
@@ -39,7 +39,7 @@ public final class DifferTest {
         resultStylish = Files.readString(Paths.get(resultStylishPath));
         resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
 
-        jsonDiff = Differ.generate(json1Path, json2Path, "stylish");
+        jsonDiff = Differ.generate(JSON_1_PATH, JSON_2_PATH, "stylish");
         yamlDiff = Differ.generate(yaml1Path, yaml2Path, "stylish");
     }
 
@@ -55,37 +55,37 @@ public final class DifferTest {
 
     @Test
     public void testEmptyFile() throws IOException {
-        String actual = Differ.generate(json1Path, emptyJsonPath, "stylish");
+        String actual = Differ.generate(JSON_1_PATH, EMPTY_JSON_PATH, "stylish");
         assertEquals(resultStylishEmpty, actual);
     }
 
     @Test
     public void testEmptyPath() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(json1Path, emptyPath, "stylish"));
+        assertThrows(IllegalArgumentException.class, () -> Differ.generate(JSON_1_PATH, EMPTY_PATH, "stylish"));
     }
 
     @Test
     public void testSingleKeyValuePair() throws IOException {
-        String actual = Differ.generate(json1Path, singleKeyJsonPath, "stylish");
+        String actual = Differ.generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testCompletelyDifferentFiles() throws IOException {
-        String actual = Differ.generate(json1Path, singleKeyJsonPath, "plain");
+        String actual = Differ.generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testPlainFormat() throws IOException {
-        String actual = Differ.generate(json1Path, json2Path, "plain");
+        String actual = Differ.generate(JSON_1_PATH, JSON_2_PATH, "plain");
         assertEquals(resultPlain, actual);
     }
 
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> {
-            Differ.generate(json1Path, json2Path, "plain");
+            Differ.generate(JSON_1_PATH, JSON_2_PATH, "plain");
         });
     }
 }
