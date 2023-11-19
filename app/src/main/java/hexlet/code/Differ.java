@@ -1,7 +1,6 @@
 package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,11 +14,11 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class Differ {
-    private static final Logger LOGGER = (Logger) LogManager.getLogger(Differ.class);
-    private final Parser PARSER;
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+    private final Parser parser;
 
     public Differ() {
-        this.PARSER = new Parser();
+        this.parser = new Parser();
     }
 
     public static String generate(String filepath1, String filepath2) throws IOException {
@@ -28,9 +27,9 @@ public class Differ {
 
     public static String generate(String filepath1, String filepath2, String format) throws IOException {
         Differ differ = new Differ();
-        JsonNode json1 = differ.PARSER.parse(new File(filepath1)).orElseThrow(() ->
+        JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
-        JsonNode json2 = differ.PARSER.parse(new File(filepath2)).orElseThrow(() ->
+        JsonNode json2 = differ.parser.parse(new File(filepath2)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
         Map<String, String> diff = generateDifference(json1, json2);
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
@@ -63,9 +62,9 @@ public class Differ {
                 }
             }
         } catch (IOException e) {
-            LOGGER.severe("IOException encountered: " + e);  // change here
+            LOGGER.severe("IOException encountered: " + e);
         }
-        return Formatter.formatterSelection(format, stringBuilder1.toString());  // Pass the trimmed output to the formatter
+        return Formatter.formatterSelection(format, stringBuilder1.toString());
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {

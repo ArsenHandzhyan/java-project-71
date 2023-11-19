@@ -28,7 +28,7 @@ public class App implements Callable<Integer> {
         System.exit(exitCode);
     }
 
-    private static final Logger logger = Logger.getLogger(App.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
 
     @Override
     public Integer call() {
@@ -36,7 +36,7 @@ public class App implements Callable<Integer> {
             String diff = Differ.generate(filepath1, filepath2, format);
             System.out.println(diff);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "An exception was thrown", e);
+            LOGGER.log(Level.SEVERE, "An exception was thrown", e);
         }
         return 0;
     }
