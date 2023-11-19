@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 public final class DifferTest {
 
     private static final String json1Path = "src/test/resources/fixtures/file1.json";
-    private static final String json2Path = "src/test/resources/fixtures/file1.json";
+    private static final String json2Path = "src/test/resources/fixtures/file2.json";
     private static final String emptyJsonPath = "src/test/resources/fixtures/emptyJson.json";
     private static final String singleKeyJsonPath = "src/test/resources/fixtures/singleKeyJson.json";
     private static final String emptyPath = "";
