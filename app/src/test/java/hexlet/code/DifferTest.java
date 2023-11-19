@@ -60,6 +60,12 @@ public final class DifferTest {
     }
 
     @Test
+    public void testTwoArguments() throws IOException {
+        String actual = Differ.generate(JSON_1_PATH, JSON_2_PATH);
+        assertEquals(resultStylish, actual);
+    }
+
+    @Test
     public void testEmptyPath() {
         assertThrows(IllegalArgumentException.class, () -> Differ.generate(JSON_1_PATH, EMPTY_PATH, "stylish"));
     }
