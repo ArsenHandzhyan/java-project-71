@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-public class Parser {
+public final class Parser {
 
     public Optional<JsonNode> parse(File file) throws IOException {
         ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());

@@ -9,8 +9,8 @@ import java.util.regex.Matcher;
 
 public class StylishFormatter {
 
-    static ObjectMapper objectMapper = new ObjectMapper();
-    static Pattern p = Pattern.compile("^([^:\\[]*):(.+)$", Pattern.DOTALL);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Pattern p = Pattern.compile("^([^:\\[]*):(.+)$", Pattern.DOTALL);
 
     public static String format(String diff) {
         StringBuilder builder = new StringBuilder();
