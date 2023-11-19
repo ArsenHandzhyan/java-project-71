@@ -15,22 +15,22 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class Differ {
-    private static final Logger logger = LogManager.getLogger(Differ.class);
-    private final Parser parser;
+    private static final Logger LOGGER = LogManager.getLogger(Differ.class);
+    private final Parser PARSER;
 
     public Differ() {
-        this.parser = new Parser();
+        this.PARSER = new Parser();
     }
 
-    public static String generate(String filepath1, String filepath2) throws IOException {
+    private static String generate(String filepath1, String filepath2) throws IOException {
         return generate(filepath1, filepath2, "stylish");
     }
 
     public static String generate(String filepath1, String filepath2, String format) throws IOException {
         Differ differ = new Differ();
-        JsonNode json1 = differ.parser.parse(new File(filepath1)).orElseThrow(() ->
+        JsonNode json1 = differ.PARSER.parse(new File(filepath1)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
-        JsonNode json2 = differ.parser.parse(new File(filepath2)).orElseThrow(() ->
+        JsonNode json2 = differ.PARSER.parse(new File(filepath2)).orElseThrow(() ->
                 new RuntimeException("File cannot be parsed: " + filepath1));
         Map<String, String> diff = generateDifference(json1, json2);
         List<Map.Entry<String, String>> sortedDiffEntries = new ArrayList<>(diff.entrySet());
@@ -63,7 +63,7 @@ public class Differ {
                 }
             }
         } catch (IOException e) {
-            logger.error("IOException encountered", e);
+            LOGGER.error("IOException encountered", e);
         }
         return Formatter.formatterSelection(format, stringBuilder1.toString());  // Pass the trimmed output to the formatter
     }
