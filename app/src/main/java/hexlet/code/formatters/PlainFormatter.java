@@ -15,7 +15,7 @@ public class PlainFormatter {
             if (line.startsWith("-")) {
                 i = handleRemovedProperty(lines, plainFormattedDiff, i);
             } else if (line.startsWith("+")) { // Added properties
-                handleAddedProperty(plainFormattedDiff, line);
+                handleAddedProperty(plainFormattedDiff, line.trim());
             }
 
         }
