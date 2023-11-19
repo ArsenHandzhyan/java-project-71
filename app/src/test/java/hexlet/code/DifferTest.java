@@ -7,33 +7,30 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public final class DifferTest {
 
-    private static String json1Path;
-    private static String json2Path;
-    private static String emptyJsonPath;
-    private static String singleKeyJsonPath;
-    private static String emptyPath;
+    private static final String json1Path = "src/test/resources/fixtures/file1.json";
+    private static final String json2Path = "src/test/resources/fixtures/file1.json";
+    private static final String emptyJsonPath = "src/test/resources/fixtures/emptyJson.json";
+    private static final String singleKeyJsonPath = "src/test/resources/fixtures/singleKeyJson.json";
+    private static final String emptyPath = "";
 
     private static String resultPlain;
     private static String resultStylish;
     private static String resultStylishEmpty;
 
-    public static String jsonDiff;
-    public static String yamlDiff;
+    private static String jsonDiff;
+    private static String yamlDiff;
 
     @BeforeEach
     public void setUp() throws IOException {
         String yaml1Path = "src/test/resources/fixtures/file1.yml";
         String yaml2Path = "src/test/resources/fixtures/file2.yml";
-
-        json1Path = "src/test/resources/fixtures/file1.json";
-        json2Path = "src/test/resources/fixtures/file2.json";
-        emptyJsonPath = "src/test/resources/fixtures/emptyJson.json";
-        singleKeyJsonPath = "src/test/resources/fixtures/singleKeyJson.json";
-        emptyPath = "";
         String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
         String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
         String resultStylishEmptyPath = "src/test/resources/fixtures/result_stylish_withEmptyFile.txt";
