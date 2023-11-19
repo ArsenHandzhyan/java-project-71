@@ -2,7 +2,6 @@ package hexlet.code;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,16 +12,17 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class Differ {
-    private static final Logger LOGGER = LogManager.getLogger(Differ.class);
+    private static final Logger LOGGER = (Logger) LogManager.getLogger(Differ.class);
     private final Parser PARSER;
 
     public Differ() {
         this.PARSER = new Parser();
     }
 
-    private static String generate(String filepath1, String filepath2) throws IOException {
+    public static String generate(String filepath1, String filepath2) throws IOException {
         return generate(filepath1, filepath2, "stylish");
     }
 
@@ -63,7 +63,7 @@ public class Differ {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("IOException encountered", e);
+            LOGGER.severe("IOException encountered: " + e);  // change here
         }
         return Formatter.formatterSelection(format, stringBuilder1.toString());  // Pass the trimmed output to the formatter
     }
