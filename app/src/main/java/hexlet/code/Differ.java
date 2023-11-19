@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class Differ {
+public final class Differ {
     private final Parser parser;
 
     public Differ() {
