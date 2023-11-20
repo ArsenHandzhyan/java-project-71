@@ -93,13 +93,14 @@ public final class Differ {
         if (!json2.has(fieldName)) {
             diff.put("- " + path, json1.get(fieldName).toString());
         } else {
-            putDifferences(json1, json2, fieldName, path, diff);
+            diff.putAll(getDifference(json1, json2, fieldName, path));
         }
         return diff;
     }
 
-    private static void putDifferences(JsonNode json1, JsonNode json2, String fieldName,
-                                       String path, Map<String, String> diff) {
+    private static Map<String, String> getDifference(JsonNode json1, JsonNode json2, String fieldName,
+                                                     String path) {
+        Map<String, String> diff = new HashMap<>();
         if (!json1.get(fieldName).equals(json2.get(fieldName))) {
             if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
                 diff.putAll(generateDifference(json1.get(fieldName), json2.get(fieldName)));
@@ -110,6 +111,7 @@ public final class Differ {
         } else {
             diff.put("  " + path, json1.get(fieldName).toString());
         }
+        return diff;
     }
 
     private static void processFieldsInJson2(JsonNode json1, JsonNode json2, Map<String, String> diff,
@@ -130,4 +132,6 @@ public final class Differ {
         }
         return curPath + "." + fieldName;
     }
+
+
 }
