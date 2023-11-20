@@ -1,5 +1,3 @@
-.DEFAULT_GOAL := build-run
-
 setup:
 	./gradlew wrapper --gradle-version 8.3
 
