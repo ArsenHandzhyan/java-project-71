@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
+    id 'application'
     id 'java'
     id 'checkstyle'
     id 'jacoco'
@@ -32,6 +33,10 @@ dependencies {
 compileJava {
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
     options.release.set(20)
+}
+
+application {
+    mainClass.set("hexlet.code.App")
 }
 
 checkstyle {
