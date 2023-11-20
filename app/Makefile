@@ -10,7 +10,7 @@ build:
 	./gradlew clean build check
 
 install:
-	./gradlew clean install
+	./gradlew clean build
 
 test:
 	./gradlew test
@@ -22,5 +22,7 @@ lint:
 	./gradlew checkstyleMain
 
 build-run: build run
+
+run:
 
 .PHONY: build
