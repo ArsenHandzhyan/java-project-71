@@ -6,11 +6,11 @@ setup:
 clean:
 	./gradlew clean
 
-build:
+build-ci:
 	./gradlew clean build check
 
-install:
-	./gradlew clean build
+build:
+	./gradlew build
 
 test:
 	./gradlew test
@@ -24,5 +24,6 @@ lint:
 build-run: build run
 
 run:
+	./gradlew run
 
 .PHONY: build
