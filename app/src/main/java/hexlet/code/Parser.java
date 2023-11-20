@@ -10,25 +10,30 @@ import java.io.IOException;
 import java.util.Optional;
 
 public final class Parser {
-
     public Optional<JsonNode> parse(File file) throws IOException {
+        String extension = getFileExtension(file).orElse("");
+        return switch (extension) {
+            case "json" -> Optional.of(parseJson(file));
+            case "yaml", "yml" -> Optional.of(parseYaml(file));
+            default -> throw new IllegalArgumentException("Unsupported file type.");
+        };
+    }
+
+    private JsonNode parseJson(File file) throws IOException {
+        ObjectMapper jsonReader = new ObjectMapper();
+        return jsonReader.readTree(file);
+    }
+
+    private JsonNode parseYaml(File file) throws IOException {
         ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
         ObjectMapper jsonWriter = new ObjectMapper();
-        String extension = getFileExtension(file).orElse("");
-        JsonNode jsonNodeTree;
-        if (extension.equals("json")) {
-            jsonNodeTree = yamlReader.readTree(file);
-        } else if (extension.equals("yaml") || extension.equals("yml")) {
-            jsonNodeTree = yamlReader.readTree(file);
-            if (jsonNodeTree.isArray()) {
-                ObjectNode newRoot = jsonWriter.createObjectNode();
-                jsonNodeTree.forEach(node -> newRoot.setAll((ObjectNode) node));
-                jsonNodeTree = newRoot;
-            }
-        } else {
-            throw new IllegalArgumentException("Unsupported file type.");
+        JsonNode jsonNodeTree = yamlReader.readTree(file);
+        if (jsonNodeTree.isArray()) {
+            ObjectNode newRoot = jsonWriter.createObjectNode();
+            jsonNodeTree.forEach(node -> newRoot.setAll((ObjectNode) node));
+            jsonNodeTree = newRoot;
         }
-        return Optional.of(jsonNodeTree);
+        return jsonNodeTree;
     }
 
     private Optional<String> getFileExtension(File file) {

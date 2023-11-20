@@ -13,26 +13,43 @@ public class StylishFormatter {
     private static final Pattern P = Pattern.compile("^([^:\\[]*):(.+)$", Pattern.DOTALL);
 
     public static String format(String diff) {
+        StringBuilder builder = processLines(diff);
+        return cleanEmptyLines(builder);
+    }
+
+    private static StringBuilder processLines(String diff) {
         StringBuilder builder = new StringBuilder();
         for (String line : diff.split("\n")) {
-            Matcher m = P.matcher(line.trim());
-            if (!line.isEmpty()) {
-                if (m.find()) {
-                    String key = m.group(1).trim();
-                    String value = m.group(2).trim();
-                    if (key.startsWith("-") || key.startsWith("+")) {
-                        builder.append("  ").append(key).append(": ").append(formatValue(value));
-                    } else {
-                        builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
-                    }
-                    if (!builder.toString().trim().isEmpty()) {
-                        builder.append("\n");
-                    }
-                } else if (!line.trim().isEmpty()) {
-                    builder.append(line).append("\n");
-                }
+            processEachLine(builder, line);
+        }
+        return builder;
+    }
+
+    private static void processEachLine(StringBuilder builder, String line) {
+        Matcher m = P.matcher(line.trim());
+        if (!line.isEmpty()) {
+            if (m.find()) {
+                processFoundMatch(builder, m);
+            } else if (!line.trim().isEmpty()) {
+                builder.append(line).append("\n");
             }
         }
+    }
+
+    private static void processFoundMatch(StringBuilder builder, Matcher m) {
+        String key = m.group(1).trim();
+        String value = m.group(2).trim();
+        if (key.startsWith("-") || key.startsWith("+")) {
+            builder.append("  ").append(key).append(": ").append(formatValue(value));
+        } else {
+            builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
+        }
+        if (!builder.toString().trim().isEmpty()) {
+            builder.append("\n");
+        }
+    }
+
+    private static String cleanEmptyLines(StringBuilder builder) {
         StringBuilder builder1 = new StringBuilder();
         for (String line : builder.toString().split("\n")) {
             if (!line.startsWith("}") && !line.isEmpty()) {

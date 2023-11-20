@@ -8,31 +8,27 @@ public class PlainFormatter {
         for (int i = 0; i < lines.length; ++i) {
             String line = lines[i].trim();
 
-            if (line.isEmpty() || line.contains("{   ") || line.contains("}   ")) {
+            if (shouldContinue(line)) {
                 continue;
             }
 
-            if (line.startsWith("-")) {
-                i = handleRemovedProperty(lines, plainFormattedDiff, i);
-            } else if (line.startsWith("+")) { // Added properties
-                handleAddedProperty(plainFormattedDiff, line);
-            }
+            i = handleLine(lines, plainFormattedDiff, i, line);
         }
 
-        String formattedDiffStr = plainFormattedDiff.toString();
-        String[] formattedDiffLines = formattedDiffStr.split("\n");
+        return removeTrailingNewline(plainFormattedDiff.toString());
+    }
 
-        plainFormattedDiff = new StringBuilder();
-        for (String formattedDiffLine : formattedDiffLines) {
-            if (!formattedDiffLine.trim().isEmpty()) {
-                plainFormattedDiff.append(formattedDiffLine).append("\n");
-            }
-        }
-        if (!plainFormattedDiff.isEmpty() && plainFormattedDiff.charAt(plainFormattedDiff.length() - 1) == '\n') {
-            plainFormattedDiff.deleteCharAt(plainFormattedDiff.length() - 1);
-        }
+    private static boolean shouldContinue(String line) {
+        return line.isEmpty() || line.contains("{   ") || line.contains("}   ");
+    }
 
-        return plainFormattedDiff.toString();
+    private static int handleLine(String[] lines, StringBuilder plainFormattedDiff, int i, String line) {
+        if (line.startsWith("-")) {
+            return handleRemovedProperty(lines, plainFormattedDiff, i);
+        } else if (line.startsWith("+")) { // Added properties
+            handleAddedProperty(plainFormattedDiff, line);
+        }
+        return i;
     }
 
     private static int handleRemovedProperty(String[] lines, StringBuilder plainFormattedDiff, int i) {
@@ -75,5 +71,16 @@ public class PlainFormatter {
 
     private static boolean isComplexValue(String value) {
         return value.startsWith("[") || value.startsWith("{");
+    }
+
+    private static String removeTrailingNewline(String string) {
+        String[] lines = string.split("\n");
+        StringBuilder builder = new StringBuilder();
+        for (String line : lines) {
+            if (!line.trim().isEmpty()) {
+                builder.append(line).append("\n");
+            }
+        }
+        return builder.toString().trim(); // this will automatically remove trailing newline character
     }
 }
