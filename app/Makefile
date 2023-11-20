@@ -12,6 +12,9 @@ build-ci:
 build:
 	./gradlew build
 
+install:
+	./gradlew build install
+
 test:
 	./gradlew test
 
