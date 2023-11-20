@@ -7,13 +7,7 @@ clean:
 	./gradlew clean
 
 build:
-	./gradlew clean build
-
-run-dist:
-	./build/install/java-package/bin/java-package
-
-run:
-	./gradlew run
+	./gradlew clean build check
 
 test:
 	./gradlew test
@@ -23,8 +17,5 @@ report:
 
 lint:
 	./gradlew checkstyleMain
-
-
-build-run: build run
 
 .PHONY: build
