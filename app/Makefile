@@ -7,6 +7,9 @@ clean:
 build:
 	./gradlew clean build check
 
+install:
+	./gradlew clean install
+
 test:
 	./gradlew test
 
