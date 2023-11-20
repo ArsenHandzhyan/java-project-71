@@ -98,7 +98,8 @@ public final class Differ {
         return diff;
     }
 
-    private static void putDifferences(JsonNode json1, JsonNode json2, String fieldName, String path, Map<String, String> diff) {
+    private static void putDifferences(JsonNode json1, JsonNode json2, String fieldName,
+                                       String path, Map<String, String> diff) {
         if (!json1.get(fieldName).equals(json2.get(fieldName))) {
             if (json1.get(fieldName).isObject() && json2.get(fieldName).isObject()) {
                 diff.putAll(generateDifference(json1.get(fieldName), json2.get(fieldName)));
