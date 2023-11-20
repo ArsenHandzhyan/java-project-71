@@ -132,6 +132,4 @@ public final class Differ {
         }
         return curPath + "." + fieldName;
     }
-
-
 }
