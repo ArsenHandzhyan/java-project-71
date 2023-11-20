@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := build-run
+.DEFAULT_GOAL := build
 
 setup:
 	./gradlew wrapper --gradle-version 8.3
@@ -20,10 +20,5 @@ report:
 
 lint:
 	./gradlew checkstyleMain
-
-build-run: build run
-
-run:
-	./gradlew run
 
 .PHONY: build

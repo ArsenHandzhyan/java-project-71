@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
     id 'java'
     id 'checkstyle'
@@ -40,12 +37,9 @@ checkstyle {
 
 test {
     useJUnitPlatform()
-    // https://technology.lastminute.com/junit5-kotlin-and-gradle-dsl/
     testLogging {
-        exceptionFormat = TestExceptionFormat.FULL
-        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
-        // showStackTraces = true
-        // showCauses = true
+        exceptionFormat 'full' // This line to control exception format.
+        events 'failed', 'passed', 'skipped'
         showStandardStreams = true
     }
 }
