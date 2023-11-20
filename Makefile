@@ -5,6 +5,9 @@ clean:
 	./gradlew clean
 
 build:
+	./gradlew clean build check
+
+install:
 	./gradlew clean build
 
 test:
@@ -15,9 +18,5 @@ report:
 
 lint:
 	./gradlew checkstyleMain
-
-check-deps:
-	./gradlew dependencyUpdates -Drevision=release
-
 
 .PHONY: build
