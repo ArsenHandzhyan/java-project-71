@@ -14,7 +14,7 @@ public final class Differ {
     public static String generate(String filepath1, String filepath2, String format) throws IOException {
         JsonNode json1 = parseJsonOrYaml(filepath1);
         JsonNode json2 = parseJsonOrYaml(filepath2);
-        return TreeBuilder.builder(json1, json2, format);
+        return TreeBuilder.buildTree(json1, json2, format);
     }
 
     private static JsonNode parseJsonOrYaml(String filepath) throws IOException {

@@ -9,15 +9,13 @@ import java.util.List;
 import java.util.Iterator;
 
 public final class TreeBuilder {
-    public static String builder(JsonNode json1, JsonNode json2, String format) {
+    public static String buildTree(JsonNode json1, JsonNode json2, String format) {
         Map<String, String> diff = generateDifference(json1, json2);
         List<Map.Entry<String, String>> sortedDiffEntries = createSortedList(diff);
         return buildOutputString(sortedDiffEntries, format);
     }
 
     private static Map<String, String> generateDifference(JsonNode json1, JsonNode json2) {
-
-
         Map<String, String> diff = new HashMap<>();
         processFieldsInJson(json1, json2, diff, json1.fieldNames(), json2.fieldNames());
         return diff;
