@@ -27,22 +27,9 @@ public class App implements Callable<Integer> {
         System.exit(exitCode);
     }
 
-    public static String getFilepath1() {
-        return filepath1;
-    }
-
-    public static String getFilepath2() {
-        return filepath2;
-    }
-
-    public static String getFormat() {
-        return format;
-    }
-
     @Override
     public final Integer call() throws IOException {
-        String diff = Differ.generate(getFilepath1(), getFilepath2(), getFormat());
-        System.out.println(diff);
+        System.out.println(Differ.generate(filepath1, filepath2, format));
         return null;
     }
 }

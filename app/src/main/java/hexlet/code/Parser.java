@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-public final class Parser {
-    public Optional<JsonNode> parse(File file) throws IOException {
+public class Parser {
+    public static Optional<JsonNode> parse(File file) throws IOException {
         String extension = getFileExtension(file).orElse("");
         return switch (extension) {
             case "json" -> Optional.of(parseJson(file));
@@ -19,12 +19,12 @@ public final class Parser {
         };
     }
 
-    private JsonNode parseJson(File file) throws IOException {
+    private static JsonNode parseJson(File file) throws IOException {
         ObjectMapper jsonReader = new ObjectMapper();
         return jsonReader.readTree(file);
     }
 
-    private JsonNode parseYaml(File file) throws IOException {
+    private static JsonNode parseYaml(File file) throws IOException {
         ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
         ObjectMapper jsonWriter = new ObjectMapper();
         JsonNode jsonNodeTree = yamlReader.readTree(file);
@@ -36,7 +36,7 @@ public final class Parser {
         return jsonNodeTree;
     }
 
-    private Optional<String> getFileExtension(File file) {
+    private static Optional<String> getFileExtension(File file) {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf == -1) {
