@@ -23,6 +23,7 @@ public final class DifferTest {
 
     private static String resultPlain;
     private static String resultStylish;
+    private static String resultJson;
     private static String resultStylishEmpty;
 
     private static String jsonDiff;
@@ -33,11 +34,13 @@ public final class DifferTest {
         String yaml1Path = "src/test/resources/fixtures/file1.yml";
         String yaml2Path = "src/test/resources/fixtures/file2.yml";
         String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
+        String resultJsonPath = "src/test/resources/fixtures/result_json.txt";
         String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
         String resultStylishEmptyPath = "src/test/resources/fixtures/result_stylish_withEmptyFile.txt";
 
         resultPlain = Files.readString(Paths.get(resultPlainPath));
         resultStylish = Files.readString(Paths.get(resultStylishPath));
+        resultJson = Files.readString(Paths.get(resultJsonPath));
         resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
 
         jsonDiff = generate(JSON_1_PATH, JSON_2_PATH, "stylish");
@@ -87,6 +90,12 @@ public final class DifferTest {
     public void testPlainFormat() throws IOException {
         String actual = generate(JSON_1_PATH, JSON_2_PATH, "plain");
         assertEquals(resultPlain, actual);
+    }
+
+    @Test
+    public void testJsonFormat() throws IOException {
+        String actual = generate(JSON_1_PATH, JSON_2_PATH, "json");
+        assertEquals(resultJson, actual);
     }
 
     @Test

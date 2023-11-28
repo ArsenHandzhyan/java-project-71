@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Iterator;
 
 public final class TreeBuilder {
-    public static String buildTree(JsonNode json1, JsonNode json2, String format) {
+    public static String buildTree(JsonNode json1, JsonNode json2, String format) throws JsonProcessingException {
         Map<String, String> diff = generateDifference(json1, json2);
         List<Map.Entry<String, String>> sortedDiffEntries = createSortedList(diff);
         return buildOutputString(sortedDiffEntries, format);
@@ -87,7 +88,7 @@ public final class TreeBuilder {
         return sortedDiffEntries;
     }
 
-    private static String buildOutputString(List<Map.Entry<String, String>> sortedDiffEntries, String format) {
+    private static String buildOutputString(List<Map.Entry<String, String>> sortedDiffEntries, String format) throws JsonProcessingException {
         StringBuilder output = new StringBuilder("{\n");
         for (Map.Entry<String, String> entry : sortedDiffEntries) {
             String key = entry.getKey();
