@@ -88,7 +88,8 @@ public final class TreeBuilder {
         return sortedDiffEntries;
     }
 
-    private static String buildOutputString(List<Map.Entry<String, String>> sortedDiffEntries, String format) throws JsonProcessingException {
+    private static String buildOutputString(List<Map.Entry<String, String>> sortedDiffEntries,
+                                            String format) throws JsonProcessingException {
         StringBuilder output = new StringBuilder("{\n");
         for (Map.Entry<String, String> entry : sortedDiffEntries) {
             String key = entry.getKey();
