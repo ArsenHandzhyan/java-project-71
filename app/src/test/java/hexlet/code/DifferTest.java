@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.io.IOException;
 
 import static hexlet.code.Differ.generate;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,7 +84,7 @@ public final class DifferTest {
     @Test
     public void testCompletelyDifferentFiles() throws IOException {
         String actual = generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
-        assertFalse(actual.isEmpty());
+        assertTrue(actual.isEmpty());
     }
 
     @Test

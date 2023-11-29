@@ -1,84 +1,36 @@
 package hexlet.code.formatters;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.Map;
+import java.util.Set;
 
 public class StylishFormatter {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final Pattern P = Pattern.compile("^([^:\\[]*):(.+)$", Pattern.DOTALL);
-
-    public static String format(String diff) {
-        StringBuilder builder = processLines(diff);
-        return cleanEmptyLines(builder);
-    }
-
-    private static StringBuilder processLines(String diff) {
-        StringBuilder builder = new StringBuilder();
-        for (String line : diff.split("\n")) {
-            processEachLine(builder, line);
+    public static String format(Map<String, Object> diff) {
+        StringBuilder result = new StringBuilder();
+        result.append("{\n");
+        Set<Map.Entry<String, Object>> entrySet = diff.entrySet();
+        for (Map.Entry<String, Object> entry : entrySet) {
+            result.append("  ")
+                    .append(entry.getKey())
+                    .append(": ")
+                    .append(formatValue(entry.getValue()))
+                    .append("\n");
         }
-        return builder;
+
+        result.append("}");
+        return result.toString();
     }
 
-    private static void processEachLine(StringBuilder builder, String line) {
-        Matcher m = P.matcher(line.trim());
-        if (!line.isEmpty()) {
-            if (m.find()) {
-                processFoundMatch(builder, m);
-            } else if (!line.trim().isEmpty()) {
-                builder.append(line).append("\n");
-            }
-        }
-    }
-
-    private static void processFoundMatch(StringBuilder builder, Matcher m) {
-        String key = m.group(1).trim();
-        String value = m.group(2).trim();
-        if (key.startsWith("-") || key.startsWith("+")) {
-            builder.append("  ").append(key).append(": ").append(formatValue(value));
+    private static String formatValue(Object value) {
+        if (value instanceof Map) {
+            // Если значение - это объект, просто вызываем toString()
+            return value.toString();
+        } else if (value instanceof Iterable) {
+            // Если значение - это массив, также вызываем toString()
+            return value.toString();
         } else {
-            builder.append("  ").append("  ").append(key).append(": ").append(formatValue(value));
-        }
-        if (!builder.toString().trim().isEmpty()) {
-            builder.append("\n");
-        }
-    }
-
-    private static String cleanEmptyLines(StringBuilder builder) {
-        StringBuilder builder1 = new StringBuilder();
-        for (String line : builder.toString().split("\n")) {
-            if (!line.startsWith("}") && !line.isEmpty()) {
-                builder1.append(line).append("\n");
-            } else if (line.startsWith("}")) {
-                builder1.append(line);
-            }
-        }
-        return builder1.toString();
-    }
-
-    private static String formatValue(String diff) {
-        try {
-            JsonNode node = OBJECT_MAPPER.readTree(diff);
-            if (node.isObject() || node.isArray()) {
-                return formatNode(node);
-            } else {
-                return node.asText();
-            }
-        } catch (IOException e) {
-            return diff.trim();
-        }
-    }
-
-    private static String formatNode(JsonNode node) {
-        if (node.isObject() || node.isArray()) {
-            return node.toString().replaceAll("\"", "").replaceAll(",", ", ").replaceAll(":", "=");
-        } else {
-            return node.asText();
+            // В остальных случаях просто возвращаем значение как строку
+            return String.valueOf(value);
         }
     }
 }

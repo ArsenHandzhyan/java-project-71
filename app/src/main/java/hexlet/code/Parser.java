@@ -1,47 +1,59 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
 
 public class Parser {
-    public static Optional<JsonNode> parse(File file) throws IOException {
-        String extension = getFileExtension(file).orElse("");
-        return switch (extension) {
-            case "json" -> Optional.of(parseJson(file));
-            case "yaml", "yml" -> Optional.of(parseYaml(file));
-            default -> throw new IllegalArgumentException("Unsupported file type.");
-        };
-    }
+    public static Map<String, Object> parse(String filePath) throws IOException {
+        Path file = resolvePath(filePath);
+        String fileExtension = getFileExtension(file);
 
-    private static JsonNode parseJson(File file) throws IOException {
-        ObjectMapper jsonReader = new ObjectMapper();
-        return jsonReader.readTree(file);
-    }
-
-    private static JsonNode parseYaml(File file) throws IOException {
-        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
-        ObjectMapper jsonWriter = new ObjectMapper();
-        JsonNode jsonNodeTree = yamlReader.readTree(file);
-        if (jsonNodeTree.isArray()) {
-            ObjectNode newRoot = jsonWriter.createObjectNode();
-            jsonNodeTree.forEach(node -> newRoot.setAll((ObjectNode) node));
-            jsonNodeTree = newRoot;
+        if ("json".equalsIgnoreCase(fileExtension)) {
+            return parseJson(file);
+        } else if ("yml".equalsIgnoreCase(fileExtension) || "yaml".equalsIgnoreCase(fileExtension)) {
+            return parseYml(file);
+        } else {
+            throw new IllegalArgumentException("Unsupported file format: " + fileExtension);
         }
-        return jsonNodeTree;
     }
 
-    private static Optional<String> getFileExtension(File file) {
-        String name = file.getName();
-        int lastIndexOf = name.lastIndexOf(".");
-        if (lastIndexOf == -1) {
-            return Optional.empty();
+    private static Path resolvePath(String filePath) {
+        Path path = Paths.get(filePath);
+        if (!path.isAbsolute()) {
+            // Если путь относительный, преобразовываем его в абсолютный
+            Path currentPath = Paths.get("");
+            path = currentPath.resolve(path).normalize();
         }
-        return Optional.of(name.substring(lastIndexOf + 1));
+        return path;
+    }
+
+    private static String getFileExtension(Path file) {
+        String fileName = file.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf('.');
+        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
+    }
+
+    public static Map<String, Object> parseJson(Path filePath) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        TypeFactory typeFactory = objectMapper.getTypeFactory();
+        MapType mapType = typeFactory.constructMapType(Map.class, String.class, Object.class);
+        return objectMapper.readValue(filePath.toFile(), mapType);
+
+    }
+
+    public static Map<String, Object> parseYml(Path filePath) throws IOException {
+        Yaml yaml = new Yaml();
+        try (var inputStream = Files.newInputStream(filePath)) {
+            return yaml.load(inputStream);
+        }
     }
 }
+
