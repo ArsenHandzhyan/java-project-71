@@ -22,16 +22,21 @@ public class TreeBuilder {
             Object value1 = formatStringValues(entry.getValue());
             Object value2 = formatStringValues(map2.get(key));
 
-            if (!map2.containsKey(key) || !Objects.equals(value2, value1)) {
-                if (!map2.containsKey(key)) {
-                    difference.put("- " + key, value1);
-                } else {
-                    difference.put("- " + key, value1);
-                    difference.put("+ " + key, value2);
-                }
+            compareAndAddDifference(key, value1, value2, map2, difference);
+        }
+    }
+
+    private static void compareAndAddDifference(String key, Object value1, Object value2,
+                                                Map<String, Object> map2, Map<String, Object> difference) {
+        if (!map2.containsKey(key) || !Objects.equals(value2, value1)) {
+            if (!map2.containsKey(key)) {
+                difference.put(DifferenceOperation.REMOVED + " " + key, value1);
             } else {
-                difference.put("  " + key, value1);
+                difference.put(DifferenceOperation.REMOVED + " " + key, value1);
+                difference.put(DifferenceOperation.ADDED + " " + key, value2);
             }
+        } else {
+            difference.put(DifferenceOperation.UNCHANGED + " " + key, value1);
         }
     }
 
@@ -43,12 +48,29 @@ public class TreeBuilder {
             Object value2 = formatStringValues(entry.getValue());
 
             if (!map1.containsKey(key)) {
-                difference.put("+ " + key, value2);
+                difference.put(DifferenceOperation.ADDED + " " + key, value2);
             }
         }
     }
 
     public static Object formatStringValues(Object value) {
         return (value instanceof String) ? "'" + value + "'" : value;
+    }
+
+    private enum DifferenceOperation {
+        ADDED("+"),
+        REMOVED("-"),
+        UNCHANGED(" ");
+
+        private final String symbol;
+
+        DifferenceOperation(String symbol) {
+            this.symbol = symbol;
+        }
+
+        @Override
+        public String toString() {
+            return symbol;
+        }
     }
 }
