@@ -17,10 +17,6 @@ public final class DifferTest {
 
     private static final String JSON_1_PATH = "src/test/resources/fixtures/file1.json";
     private static final String JSON_2_PATH = "src/test/resources/fixtures/file2.json";
-    private static final String JSON_1_ABSOLUTE_PATH =
-            "/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/fixtures/file1.json";
-    private static final String JSON_2_ABSOLUTE_PATH =
-            "/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/fixtures/file2.json";
     private static final String EMPTY_JSON_PATH = "src/test/resources/fixtures/emptyJson.json";
     private static final String SINGLE_KEY_JSON_PATH = "src/test/resources/fixtures/singleKeyJson.json";
     private static final String EMPTY_PATH = "";
@@ -70,12 +66,6 @@ public final class DifferTest {
     @Test
     public void testTwoArguments() throws IOException {
         String actual = generate(JSON_1_PATH, JSON_2_PATH);
-        assertEquals(resultStylish, actual);
-    }
-
-    @Test
-    public void testAbsolutePath() throws IOException {
-        String actual = generate(JSON_1_ABSOLUTE_PATH, JSON_2_ABSOLUTE_PATH);
         assertEquals(resultStylish, actual);
     }
 
