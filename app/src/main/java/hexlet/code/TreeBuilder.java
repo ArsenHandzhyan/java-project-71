@@ -14,7 +14,9 @@ public class TreeBuilder {
         return difference;
     }
 
-    private static void compareAndBuildDifference(Map<String, Object> map1, Map<String, Object> map2, Map<String, Object> difference) {
+    private static void compareAndBuildDifference(Map<String, Object> map1,
+                                                  Map<String, Object> map2,
+                                                  Map<String, Object> difference) {
         for (Map.Entry<String, Object> entry : map1.entrySet()) {
             String key = entry.getKey();
             Object value1 = formatStringValues(entry.getValue());
@@ -33,7 +35,9 @@ public class TreeBuilder {
         }
     }
 
-    private static void addAdditionalEntries(Map<String, Object> map1, Map<String, Object> map2, Map<String, Object> difference) {
+    private static void addAdditionalEntries(Map<String, Object> map1,
+                                             Map<String, Object> map2,
+                                             Map<String, Object> difference) {
         for (Map.Entry<String, Object> entry : map2.entrySet()) {
             String key = entry.getKey();
             Object value2 = formatStringValues(entry.getValue());
