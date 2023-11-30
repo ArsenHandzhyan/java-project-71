@@ -8,14 +8,10 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 public class Parser {
-    public static Map<String, Object> parse(String filePath) throws IOException {
-        Path file = resolvePath(filePath);
-        String fileExtension = getFileExtension(file);
-
+    public static Map<String, Object> parse(String fileExtension, Path file) throws IOException {
         if ("json".equalsIgnoreCase(fileExtension)) {
             return parseJson(file);
         } else if ("yml".equalsIgnoreCase(fileExtension) || "yaml".equalsIgnoreCase(fileExtension)) {
@@ -23,22 +19,6 @@ public class Parser {
         } else {
             throw new IllegalArgumentException("Unsupported file format: " + fileExtension);
         }
-    }
-
-    private static Path resolvePath(String filePath) {
-        Path path = Paths.get(filePath);
-        if (!path.isAbsolute()) {
-            // Если путь относительный, преобразовываем его в абсолютный
-            Path currentPath = Paths.get("");
-            path = currentPath.resolve(path).normalize();
-        }
-        return path;
-    }
-
-    private static String getFileExtension(Path file) {
-        String fileName = file.getFileName().toString();
-        int dotIndex = fileName.lastIndexOf('.');
-        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
     }
 
     public static Map<String, Object> parseJson(Path filePath) throws IOException {

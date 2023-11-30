@@ -30,7 +30,7 @@ public class StylishFormatter {
             return value.toString();
         } else {
             // В остальных случаях просто возвращаем значение как строку
-            return String.valueOf(value);
+            return String.valueOf(value).replace("'", "");
         }
     }
 }

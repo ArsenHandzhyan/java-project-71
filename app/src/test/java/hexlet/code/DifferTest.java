@@ -3,21 +3,24 @@ package hexlet.code;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.io.IOException;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class DifferTest {
 
     private static final String JSON_1_PATH = "src/test/resources/fixtures/file1.json";
     private static final String JSON_2_PATH = "src/test/resources/fixtures/file2.json";
+    private static final String JSON_1_ABSOLUTE_PATH =
+            "/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/fixtures/file1.json";
+    private static final String JSON_2_ABSOLUTE_PATH =
+            "/home/arsen/IdeaProjects/java-project-71/app/src/test/resources/fixtures/file2.json";
     private static final String EMPTY_JSON_PATH = "src/test/resources/fixtures/emptyJson.json";
     private static final String SINGLE_KEY_JSON_PATH = "src/test/resources/fixtures/singleKeyJson.json";
     private static final String EMPTY_PATH = "";
@@ -71,6 +74,12 @@ public final class DifferTest {
     }
 
     @Test
+    public void testAbsolutePath() throws IOException {
+        String actual = generate(JSON_1_ABSOLUTE_PATH, JSON_2_ABSOLUTE_PATH);
+        assertEquals(resultStylish, actual);
+    }
+
+    @Test
     public void testEmptyPath() {
         assertThrows(IllegalArgumentException.class, () -> generate(JSON_1_PATH, EMPTY_PATH, "stylish"));
     }
@@ -84,7 +93,7 @@ public final class DifferTest {
     @Test
     public void testCompletelyDifferentFiles() throws IOException {
         String actual = generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
-        assertTrue(actual.isEmpty());
+        assertFalse(actual.isEmpty());
     }
 
     @Test

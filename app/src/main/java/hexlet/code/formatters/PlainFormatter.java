@@ -1,8 +1,8 @@
 package hexlet.code.formatters;
 
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class PlainFormatter {
     public static String format(Map<String, Object> diff) {
@@ -23,7 +23,6 @@ public class PlainFormatter {
 
             i = handleLine(lines, plainFormattedDiff, i, line);
         }
-
         return removeTrailingNewline(plainFormattedDiff.toString());
     }
 
@@ -75,16 +74,9 @@ public class PlainFormatter {
     }
 
     private static String getFormattedValue(Object value) {
-        return isComplexValue(value.toString()) ? "[complex value]" : formatValue(value);
+        return isComplexValue(value.toString()) ? "[complex value]" : value.toString();
     }
 
-    private static String formatValue(Object value) {
-        if (value instanceof String) {
-            return "'" + value + "'";
-        } else {
-            return value.toString();
-        }
-    }
 
     private static boolean isComplexValue(String value) {
         return value.startsWith("[") || value.startsWith("{");
