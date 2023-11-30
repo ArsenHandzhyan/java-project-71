@@ -26,8 +26,11 @@ public class TreeBuilder {
         }
     }
 
-    private static void compareAndAddDifference(String key, Object value1, Object value2,
-                                                Map<String, Object> map2, Map<String, Object> difference) {
+    private static void compareAndAddDifference(String key,
+                                                Object value1,
+                                                Object value2,
+                                                Map<String, Object> map2,
+                                                Map<String, Object> difference) {
         if (!map2.containsKey(key) || !Objects.equals(value2, value1)) {
             if (!map2.containsKey(key)) {
                 difference.put(DifferenceOperation.REMOVED + " " + key, value1);
