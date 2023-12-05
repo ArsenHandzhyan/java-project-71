@@ -34,7 +34,7 @@ public final class DifferTest {
         String yaml1Path = "src/test/resources/fixtures/file1.yml";
         String yaml2Path = "src/test/resources/fixtures/file2.yml";
         String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
-        String resultJsonPath = "src/test/resources/fixtures/result_json.txt";
+        String resultJsonPath = "src/test/resources/fixtures/result_json.json";
         String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
         String resultStylishEmptyPath = "src/test/resources/fixtures/result_stylish_withEmptyFile.txt";
 
