@@ -33,13 +33,12 @@ public class TreeBuilder {
                                                 Map<String, Object> difference) {
         if (!map2.containsKey(key) || !Objects.equals(value2, value1)) {
             if (!map2.containsKey(key)) {
-                difference.put(DifferenceOperation.REMOVED + " " + key, value1);
+                difference.put("removed " + key, value1);
             } else {
-                difference.put(DifferenceOperation.REMOVED + " " + key, value1);
-                difference.put(DifferenceOperation.ADDED + " " + key, value2);
+                difference.put("updated " + key, new OldAndNewValue(value1, value2));
             }
         } else {
-            difference.put(DifferenceOperation.UNCHANGED + " " + key, value1);
+            difference.put("unchanged " + key, value1);
         }
     }
 
@@ -51,29 +50,12 @@ public class TreeBuilder {
             Object value2 = formatStringValues(entry.getValue());
 
             if (!map1.containsKey(key)) {
-                difference.put(DifferenceOperation.ADDED + " " + key, value2);
+                difference.put("added " + key, value2);
             }
         }
     }
 
     public static Object formatStringValues(Object value) {
         return (value instanceof String) ? "'" + value + "'" : value;
-    }
-
-    private enum DifferenceOperation {
-        ADDED("+"),
-        REMOVED("-"),
-        UNCHANGED(" ");
-
-        private final String symbol;
-
-        DifferenceOperation(String symbol) {
-            this.symbol = symbol;
-        }
-
-        @Override
-        public String toString() {
-            return symbol;
-        }
     }
 }

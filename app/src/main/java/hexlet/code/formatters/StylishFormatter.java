@@ -1,35 +1,66 @@
 package hexlet.code.formatters;
 
+import hexlet.code.OldAndNewValue;
+
+import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 
 public class StylishFormatter {
 
     public static String format(Map<String, Object> diff) {
-        StringBuilder result = new StringBuilder();
-        result.append("{\n");
-        Set<Map.Entry<String, Object>> entrySet = diff.entrySet();
-        for (Map.Entry<String, Object> entry : entrySet) {
-            result.append("  ")
-                    .append(entry.getKey())
-                    .append(": ")
-                    .append(formatValue(entry.getValue()))
-                    .append("\n");
-        }
+        StringBuilder formatted = new StringBuilder();
 
-        result.append("}");
-        return result.toString();
+        for (Map.Entry<String, Object> entry : diff.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            String[] parts = key.split(" ");
+            String updatedKey = parts[1];
+            if (key.startsWith("added")) {
+                formatted.append("  + ").append(key.substring(6)).append(": ");
+                formatted.append(getFormattedValue(value)).append("\n");
+            } else if (key.startsWith("removed")) {
+                formatted.append("  - ").append(key.substring(8)).append(": ");
+                formatted.append(getFormattedValue(value)).append("\n");
+            } else if (key.startsWith("updated")) {
+                OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
+                formatted.append("  - ").append(updatedKey).append(": ");
+                formatted.append(getFormattedValue(oldAndNewValue.getValue1())).append("\n");
+                formatted.append("  + ").append(updatedKey).append(": ");
+                formatted.append(getFormattedValue(oldAndNewValue.getValue2())).append("\n");
+            } else if (key.startsWith("unchanged")) {
+                formatted.append("    ").append(key.substring(10)).append(": ");
+                formatted.append(getFormattedValue(value)).append("\n");
+            }
+        }
+        String[] lines = formatted.toString().split(System.lineSeparator());
+        Arrays.sort(lines, (sb1, sb2) -> {
+            String[] parts1 = sb1.split(":");
+            String updatedKey1 = parts1[0];
+            String[] parts2 = sb2.split(":");
+            String updatedKey2 = parts2[0];
+            String cleanKey1 = updatedKey1.replaceAll("[\\s\\-+]", "");
+            String cleanKey2 = updatedKey2.replaceAll("[\\s\\-+]", "");
+            if (cleanKey1.compareTo(cleanKey2) == 0) {
+                return sb2.compareTo(sb1);
+            }
+            return cleanKey1.compareTo(cleanKey2);
+        });
+
+
+        // Собрать отсортированный результат обратно в StringBuilder
+        StringBuilder sortedSB = new StringBuilder("{\n");
+        for (String line : lines) {
+            sortedSB.append(line).append(System.lineSeparator());
+        }
+        sortedSB.append("}");
+
+        return sortedSB.toString();
     }
 
-    private static String formatValue(Object value) {
-        if (value instanceof Map) {
-            // Если значение - это объект, просто вызываем toString()
-            return value.toString();
-        } else if (value instanceof Iterable) {
-            // Если значение - это массив, также вызываем toString()
+    private static String getFormattedValue(Object value) {
+        if (value instanceof Object[] || value instanceof Arrays) {
             return value.toString();
         } else {
-            // В остальных случаях просто возвращаем значение как строку
             return String.valueOf(value).replace("'", "");
         }
     }

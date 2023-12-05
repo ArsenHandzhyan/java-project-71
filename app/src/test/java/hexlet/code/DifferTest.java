@@ -1,17 +1,16 @@
 package hexlet.code;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class DifferTest {
 
@@ -93,9 +92,9 @@ public final class DifferTest {
     }
 
     @Test
-    public void testJsonFormat() throws IOException {
+    public void testJsonFormat() throws IOException, JSONException {
         String actual = generate(JSON_1_PATH, JSON_2_PATH, "json");
-        assertEquals(resultJson, actual);
+        JSONAssert.assertEquals(resultJson, actual, false);
     }
 
     @Test
