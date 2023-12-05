@@ -1,12 +1,12 @@
 package hexlet.code;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 public class TreeBuilder {
     public static Map<String, Object> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
-        Map<String, Object> difference = new TreeMap<>(new KeyComparator());
+        Map<String, Object> difference = new HashMap<>();
 
         compareAndBuildDifference(map1, map2, difference);
         addAdditionalEntries(map1, map2, difference);
