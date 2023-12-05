@@ -1,5 +1,6 @@
 package hexlet.code.formatters;
 
+import hexlet.code.KeyComparator;
 import hexlet.code.OldAndNewValue;
 
 import java.util.Arrays;
@@ -33,18 +34,7 @@ public class StylishFormatter {
             }
         }
         String[] lines = formatted.toString().split(System.lineSeparator());
-        Arrays.sort(lines, (sb1, sb2) -> {
-            String[] parts1 = sb1.split(":");
-            String updatedKey1 = parts1[0];
-            String[] parts2 = sb2.split(":");
-            String updatedKey2 = parts2[0];
-            String cleanKey1 = updatedKey1.replaceAll("[\\s\\-+]", "");
-            String cleanKey2 = updatedKey2.replaceAll("[\\s\\-+]", "");
-            if (cleanKey1.compareTo(cleanKey2) == 0) {
-                return sb2.compareTo(sb1);
-            }
-            return cleanKey1.compareTo(cleanKey2);
-        });
+        Arrays.sort(lines, new KeyComparator());
 
 
         // Собрать отсортированный результат обратно в StringBuilder
