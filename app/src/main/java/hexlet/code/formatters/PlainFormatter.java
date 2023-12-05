@@ -18,15 +18,15 @@ public class PlainFormatter {
             String updatedKey = parts[1];
             if (key.startsWith("added")) {
                 formatted.append(String.format("Property '%s' was added with value: %s%n",
-                        updatedKey, getFormattedValue1(value)));
+                        updatedKey, getFormattedValue(value)));
             } else if (key.startsWith("removed")) {
                 formatted.append(String.format("Property '%s' was removed%n", updatedKey));
             } else if (key.startsWith("updated")) {
                 OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
                 formatted.append(String.format("Property '%s' was updated. From %s to %s%n",
                         updatedKey,
-                        getFormattedValue1(oldAndNewValue.getValue1()),
-                        getFormattedValue1(oldAndNewValue.getValue2())));
+                        getFormattedValue(oldAndNewValue.value1()),
+                        getFormattedValue(oldAndNewValue.value2())));
             }
         }
         return getSortedDiff(formatted);
@@ -38,7 +38,7 @@ public class PlainFormatter {
         return String.join(System.lineSeparator(), lines);
     }
 
-    private static String getFormattedValue1(Object value) {
+    private static String getFormattedValue(Object value) {
         if (Objects.isNull(value)) {
             return null;
         } else {

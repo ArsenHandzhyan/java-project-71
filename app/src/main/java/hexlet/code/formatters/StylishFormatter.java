@@ -17,19 +17,19 @@ public class StylishFormatter {
             String[] parts = key.split(" ");
             String updatedKey = parts[1];
             if (key.startsWith("added")) {
-                formatted.append("  + ").append(key.substring(6)).append(": ");
+                formatted.append("  + ").append(updatedKey).append(": ");
                 formatted.append(getFormattedValue(value)).append("\n");
             } else if (key.startsWith("removed")) {
-                formatted.append("  - ").append(key.substring(8)).append(": ");
+                formatted.append("  - ").append(updatedKey).append(": ");
                 formatted.append(getFormattedValue(value)).append("\n");
             } else if (key.startsWith("updated")) {
                 OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
                 formatted.append("  - ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(oldAndNewValue.getValue1())).append("\n");
+                formatted.append(getFormattedValue(oldAndNewValue.value1())).append("\n");
                 formatted.append("  + ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(oldAndNewValue.getValue2())).append("\n");
+                formatted.append(getFormattedValue(oldAndNewValue.value2())).append("\n");
             } else if (key.startsWith("unchanged")) {
-                formatted.append("    ").append(key.substring(10)).append(": ");
+                formatted.append("    ").append(updatedKey).append(": ");
                 formatted.append(getFormattedValue(value)).append("\n");
             }
         }
