@@ -1,6 +1,6 @@
 package hexlet.code.formatters;
 
-import hexlet.code.KeyComparator;
+import hexlet.code.KeyComparatorForStylishAndPlainFormats;
 import hexlet.code.OldAndNewValue;
 
 import java.util.Arrays;
@@ -25,16 +25,16 @@ public class StylishFormatter {
             } else if (key.startsWith("updated")) {
                 OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
                 formatted.append("  - ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(oldAndNewValue.value1())).append("\n");
+                formatted.append(getFormattedValue(oldAndNewValue.oldValue())).append("\n");
                 formatted.append("  + ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(oldAndNewValue.value2())).append("\n");
+                formatted.append(getFormattedValue(oldAndNewValue.newValue())).append("\n");
             } else if (key.startsWith("unchanged")) {
                 formatted.append("    ").append(updatedKey).append(": ");
                 formatted.append(getFormattedValue(value)).append("\n");
             }
         }
         String[] lines = formatted.toString().split(System.lineSeparator());
-        Arrays.sort(lines, new KeyComparator());
+        Arrays.sort(lines, new KeyComparatorForStylishAndPlainFormats());
 
 
         // Собрать отсортированный результат обратно в StringBuilder

@@ -1,5 +1,59 @@
 {
+  "unchanged chars1": [
+    "a",
+    "b",
+    "c"
+  ],
+  "updated chars2": {
+    "oldValue": [
+      "d",
+      "e",
+      "f"
+    ],
+    "newValue": false
+  },
+  "updated checked": {
+    "oldValue": false,
+    "newValue": true
+  },
+  "updated default": {
+    "oldValue": null,
+    "newValue": [
+      "value1",
+      "value2"
+    ]
+  },
+  "updated id": {
+    "oldValue": 45,
+    "newValue": null
+  },
+  "removed key1": "'value1'",
   "added key2": "'value2'",
+  "unchanged numbers1": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "updated numbers2": {
+    "oldValue": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "newValue": [
+      22,
+      33,
+      44,
+      55
+    ]
+  },
+  "removed numbers3": [
+    3,
+    4,
+    5
+  ],
   "added numbers4": [
     4,
     5,
@@ -9,70 +63,16 @@
     "nestedKey": "value",
     "isNested": true
   },
-  "removed key1": "'value1'",
-  "removed numbers3": [
-    3,
-    4,
-    5
-  ],
-  "unchanged chars1": [
-    "a",
-    "b",
-    "c"
-  ],
-  "unchanged numbers1": [
-    1,
-    2,
-    3,
-    4
-  ],
-  "updated chars2": {
-    "value1": [
-      "d",
-      "e",
-      "f"
-    ],
-    "value2": false
-  },
-  "updated checked": {
-    "value1": false,
-    "value2": true
-  },
-  "updated default": {
-    "value1": null,
-    "value2": [
-      "value1",
-      "value2"
-    ]
-  },
-  "updated id": {
-    "value1": 45,
-    "value2": null
-  },
-  "updated numbers2": {
-    "value1": [
-      2,
-      3,
-      4,
-      5
-    ],
-    "value2": [
-      22,
-      33,
-      44,
-      55
-    ]
-  },
   "updated setting1": {
-    "value1": "'Some value'",
-    "value2": "'Another value'"
+    "oldValue": "'Some value'",
+    "newValue": "'Another value'"
   },
   "updated setting2": {
-    "value1": 200,
-    "value2": 300
+    "oldValue": 200,
+    "newValue": 300
   },
   "updated setting3": {
-    "value1": true,
-    "value2": "'none'"
+    "oldValue": true,
+    "newValue": "'none'"
   }
 }

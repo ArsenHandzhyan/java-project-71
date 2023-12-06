@@ -2,7 +2,7 @@ package hexlet.code;
 
 import java.util.Comparator;
 
-public final class KeyComparator implements Comparator<String> {
+public final class KeyComparatorForJsonFormat implements Comparator<String> {
     /**
      * Compares two strings for sorting, ignoring whitespace and hyphens.
      *
@@ -22,8 +22,7 @@ public final class KeyComparator implements Comparator<String> {
     }
 
     public static String clearKeyName(String s) {
-        String[] parts = s.split(":");
-        String key = parts[0];
-        return key.replaceAll("[\\s\\-+]", "");
+        int indexOf = s.indexOf(" ") + 1;
+        return s.substring(indexOf);
     }
 }

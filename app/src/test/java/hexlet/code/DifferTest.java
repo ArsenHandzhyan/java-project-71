@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public final class DifferTest {
 
-    private static final String JSON_1_PATH = "src/test/resources/fixtures/file1.json";
-    private static final String JSON_2_PATH = "src/test/resources/fixtures/file2.json";
+    private static final String YML_1_PATH = "src/test/resources/fixtures/file1.yml";
+    private static final String YML_2_PATH = "src/test/resources/fixtures/file2.yml";
     private static final String EMPTY_JSON_PATH = "src/test/resources/fixtures/emptyJson.json";
     private static final String SINGLE_KEY_JSON_PATH = "src/test/resources/fixtures/singleKeyJson.json";
     private static final String EMPTY_PATH = "";
@@ -28,13 +28,10 @@ public final class DifferTest {
     private static String resultJson;
     private static String resultStylishEmpty;
 
-    private static String jsonDiff;
-    private static String yamlDiff;
+    private static String stylishDiff;
 
     @BeforeEach
     public void setUp() throws IOException {
-        String yaml1Path = "src/test/resources/fixtures/file1.yml";
-        String yaml2Path = "src/test/resources/fixtures/file2.yml";
         String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
         String resultJsonPath = "src/test/resources/fixtures/result_json.json";
         String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
@@ -45,65 +42,63 @@ public final class DifferTest {
         resultJson = Files.readString(Paths.get(resultJsonPath));
         resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
 
-        jsonDiff = generate(JSON_1_PATH, JSON_2_PATH, "stylish");
-        yamlDiff = generate(yaml1Path, yaml2Path, "stylish");
+        stylishDiff = generate(YML_1_PATH, YML_2_PATH, "stylish");
     }
 
     @Test
     public void testYamlComparison() {
-        assertFalse(yamlDiff.isEmpty());
+        assertFalse(stylishDiff.isEmpty());
     }
 
     @Test
     public void testWithout() {
-        assertEquals(resultStylish, jsonDiff);
+        assertEquals(resultStylish, stylishDiff);
     }
 
     @Test
     public void testEmptyFile() throws IOException {
-        String actual = generate(JSON_1_PATH, EMPTY_JSON_PATH, "stylish");
+        String actual = generate(YML_1_PATH, EMPTY_JSON_PATH, "stylish");
         assertEquals(resultStylishEmpty, actual);
     }
 
     @Test
-    public void testTwoArguments() throws IOException {
-        String actual = generate(JSON_1_PATH, JSON_2_PATH);
-        assertEquals(resultStylish, actual);
+    public void testTwoArguments() {
+        assertEquals(resultStylish, stylishDiff);
     }
 
     @Test
     public void testEmptyPath() {
-        assertThrows(IllegalArgumentException.class, () -> generate(JSON_1_PATH, EMPTY_PATH, "stylish"));
+        assertThrows(IllegalArgumentException.class, () -> generate(YML_1_PATH, EMPTY_PATH, "stylish"));
     }
 
     @Test
     public void testSingleKeyValuePair() throws IOException {
-        String actual = generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
+        String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testCompletelyDifferentFiles() throws IOException {
-        String actual = generate(JSON_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
+        String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
     public void testPlainFormat() throws IOException {
-        String actual = generate(JSON_1_PATH, JSON_2_PATH, "plain");
+        String actual = generate(YML_1_PATH, YML_2_PATH, "plain");
         assertEquals(resultPlain, actual);
     }
 
     @Test
     public void testJsonFormat() throws IOException, JSONException {
-        String actual = generate(JSON_1_PATH, JSON_2_PATH, "json");
+        String actual = generate(YML_1_PATH, YML_2_PATH, "json");
         JSONAssert.assertEquals(resultJson, actual, false);
     }
 
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> {
-            generate(JSON_1_PATH, JSON_2_PATH, "plain");
+            generate(YML_1_PATH, YML_2_PATH, "plain");
         });
     }
 }

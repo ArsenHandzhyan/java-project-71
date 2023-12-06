@@ -1,6 +1,6 @@
 package hexlet.code.formatters;
 
-import hexlet.code.KeyComparator;
+import hexlet.code.KeyComparatorForStylishAndPlainFormats;
 import hexlet.code.OldAndNewValue;
 
 import java.util.Arrays;
@@ -25,8 +25,8 @@ public class PlainFormatter {
                 OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
                 formatted.append(String.format("Property '%s' was updated. From %s to %s%n",
                         updatedKey,
-                        getFormattedValue(oldAndNewValue.value1()),
-                        getFormattedValue(oldAndNewValue.value2())));
+                        getFormattedValue(oldAndNewValue.oldValue()),
+                        getFormattedValue(oldAndNewValue.newValue())));
             }
         }
         return getSortedDiff(formatted);
@@ -34,7 +34,7 @@ public class PlainFormatter {
 
     private static String getSortedDiff(StringBuilder formatted) {
         String[] lines = formatted.toString().split(System.lineSeparator());
-        Arrays.sort(lines, new KeyComparator());
+        Arrays.sort(lines, new KeyComparatorForStylishAndPlainFormats());
         return String.join(System.lineSeparator(), lines);
     }
 
