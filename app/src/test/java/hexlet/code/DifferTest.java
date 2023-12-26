@@ -28,7 +28,7 @@ public final class DifferTest {
     private static String resultJson;
     private static String resultStylishEmpty;
 
-    private static String stylishDiff;
+    private static String generateStylishDiff;
 
     @BeforeEach
     public void setUp() throws IOException {
@@ -42,17 +42,17 @@ public final class DifferTest {
         resultJson = Files.readString(Paths.get(resultJsonPath));
         resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
 
-        stylishDiff = generate(YML_1_PATH, YML_2_PATH, "stylish");
+        generateStylishDiff = generate(YML_1_PATH, YML_2_PATH, "stylish");
     }
 
     @Test
     public void testYamlComparison() {
-        assertFalse(stylishDiff.isEmpty());
+        assertFalse(generateStylishDiff.isEmpty());
     }
 
     @Test
     public void testWithout() {
-        assertEquals(resultStylish, stylishDiff);
+        assertEquals(resultStylish, generateStylishDiff);
     }
 
     @Test
@@ -63,7 +63,7 @@ public final class DifferTest {
 
     @Test
     public void testTwoArguments() {
-        assertEquals(resultStylish, stylishDiff);
+        assertEquals(resultStylish, generateStylishDiff);
     }
 
     @Test
