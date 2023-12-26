@@ -1,22 +1,23 @@
 package hexlet.code;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class TreeBuilder {
-    public static Map<String, Object> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
-        Map<String, Object> difference = new HashMap<>();
+    public static List<Map<String, Object>> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
+        List<Map<String, Object>> difference = new ArrayList<>(); // Изменено на List
 
-        compareAndBuildDifference(map1, map2, difference);
-        addAdditionalEntries(map1, map2, difference);
-
+        compareAndBuildDifference(map1, map2, difference); // Теперь входной параметр - список
+        addAdditionalEntries(map1, map2, difference); // Теперь входной параметр - список
         return difference;
     }
 
     private static void compareAndBuildDifference(Map<String, Object> map1,
                                                   Map<String, Object> map2,
-                                                  Map<String, Object> difference) {
+                                                  List<Map<String, Object>> difference) { // Теперь принимает List
         for (Map.Entry<String, Object> entry : map1.entrySet()) {
             String key = entry.getKey();
             Object value1 = formatStringValues(entry.getValue());
@@ -30,27 +31,34 @@ public class TreeBuilder {
                                                 Object oldValue,
                                                 Object newValue,
                                                 Map<String, Object> map2,
-                                                Map<String, Object> difference) {
-        if (!map2.containsKey(key) || !Objects.equals(newValue, oldValue)) {
-            if (!map2.containsKey(key)) {
-                difference.put("removed " + key, oldValue);
-            } else {
-                difference.put("updated " + key, new OldAndNewValue(oldValue, newValue));
-            }
+                                                List<Map<String, Object>> difference) { // Теперь принимает List
+        Map<String, Object> change = new HashMap<>(); // Создаём новую карту для каждого изменения
+        if (!map2.containsKey(key)) {
+            change.put("value", oldValue);
+            change.put("removed", key);
+            difference.add(change);
+        } else if (!Objects.equals(newValue, oldValue)) {
+            change.put("oldValue", oldValue);
+            change.put("newValue", newValue);
+            change.put("updated", key);
+            difference.add(change);
         } else {
-            difference.put("unchanged " + key, oldValue);
+            change.put("value", oldValue);
+            change.put("unchanged", key);
+            difference.add(change);
         }
     }
 
     private static void addAdditionalEntries(Map<String, Object> map1,
                                              Map<String, Object> map2,
-                                             Map<String, Object> difference) {
+                                             List<Map<String, Object>> difference) { // Теперь принимает List
         for (Map.Entry<String, Object> entry : map2.entrySet()) {
             String key = entry.getKey();
-            Object value2 = formatStringValues(entry.getValue());
-
             if (!map1.containsKey(key)) {
-                difference.put("added " + key, value2);
+                Map<String, Object> added = new HashMap<>();
+                added.put("value", formatStringValues(entry.getValue()));
+                added.put("added", key);
+                difference.add(added); // Добавляем карту в список изменений
             }
         }
     }
