@@ -10,10 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class DifferTest {
 
@@ -56,7 +53,7 @@ public final class DifferTest {
     }
 
     @Test
-    public void testEmptyFile() throws IOException {
+    public void testEmptyFile() {
         String actual = generate(YML_1_PATH, EMPTY_JSON_PATH, "stylish");
         assertEquals(resultStylishEmpty, actual);
     }
@@ -72,25 +69,25 @@ public final class DifferTest {
     }
 
     @Test
-    public void testSingleKeyValuePair() throws IOException {
+    public void testSingleKeyValuePair() {
         String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testCompletelyDifferentFiles() throws IOException {
+    public void testCompletelyDifferentFiles() {
         String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testPlainFormat() throws IOException {
+    public void testPlainFormat() {
         String actual = generate(YML_1_PATH, YML_2_PATH, "plain");
         assertEquals(resultPlain, actual);
     }
 
     @Test
-    public void testJsonFormat() throws IOException, JSONException {
+    public void testJsonFormat() throws JSONException {
         String actual = generate(YML_1_PATH, YML_2_PATH, "json");
         JSONAssert.assertEquals(resultJson, actual, false);
     }
