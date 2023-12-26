@@ -2,7 +2,6 @@ package hexlet.code;
 
 import picocli.CommandLine;
 
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -28,7 +27,7 @@ public class App implements Callable<Integer> {
     }
 
     @Override
-    public final Integer call() throws IOException {
+    public final Integer call() throws RuntimeException {
         System.out.println(Differ.generate(filepath1, filepath2, format));
         return null;
     }
