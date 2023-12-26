@@ -1,8 +1,9 @@
 package hexlet.code;
 
 import java.util.Comparator;
+import java.util.Map;
 
-public final class KeyComparatorForJsonFormat implements Comparator<String> {
+public final class KeyComparatorForJsonFormat implements Comparator<Map<String, Object>> {
     /**
      * Compares two strings for sorting, ignoring whitespace and hyphens.
      *
@@ -12,17 +13,23 @@ public final class KeyComparatorForJsonFormat implements Comparator<String> {
      * argument is less than, equal to, or greater than the second
      */
     @Override
-    public int compare(String sb1, String sb2) {
-        String cleanKey1 = clearKeyName(sb1);
-        String cleanKey2 = clearKeyName(sb2);
-        if (cleanKey1.compareTo(cleanKey2) == 0) {
-            return sb2.compareTo(sb1);
+    public int compare(Map<String, Object> sb1, Map<String, Object> sb2) {
+
+
+        String key1 = clearKeyName(sb1);
+        String key2 = clearKeyName(sb2);
+        if (key1.compareTo(key2) == 0) {
+            return sb2.toString().compareTo(sb1.toString());
         }
-        return cleanKey1.compareTo(cleanKey2);
+        return key1.compareTo(key2);
     }
 
-    public static String clearKeyName(String s) {
-        int indexOf = s.indexOf(" ") + 1;
-        return s.substring(indexOf);
+    public static String clearKeyName(Map<String, Object> s) {
+        String changeType = s.keySet().stream()
+                .filter(key -> key.matches("added|removed|updated|unchanged"))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Invalid change type"));
+
+        return s.get(changeType).toString();
     }
 }
