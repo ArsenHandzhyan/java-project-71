@@ -1,46 +1,51 @@
 package hexlet.code.formatters;
 
 import hexlet.code.KeyComparatorForStylishAndPlainFormats;
-import hexlet.code.OldAndNewValue;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class StylishFormatter {
 
-    public static String format(Map<String, Object> diff) {
-        StringBuilder formatted = new StringBuilder();
+    public static String format(List<Map<String, Object>> diff) {
+        List<String> lines = new ArrayList<>();
 
-        for (Map.Entry<String, Object> entry : diff.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            String[] parts = key.split(" ");
-            String updatedKey = parts[1];
-            if (key.startsWith("added")) {
-                formatted.append("  + ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(value)).append("\n");
-            } else if (key.startsWith("removed")) {
-                formatted.append("  - ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(value)).append("\n");
-            } else if (key.startsWith("updated")) {
-                OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
-                formatted.append("  - ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(oldAndNewValue.oldValue())).append("\n");
-                formatted.append("  + ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(oldAndNewValue.newValue())).append("\n");
-            } else if (key.startsWith("unchanged")) {
-                formatted.append("    ").append(updatedKey).append(": ");
-                formatted.append(getFormattedValue(value)).append("\n");
+        for (Map<String, Object> change : diff) {
+            String changeType = change.keySet().stream()
+                    .filter(key -> key.matches("added|removed|updated|unchanged"))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Invalid change type"));
+
+            String key = change.get(changeType).toString();
+            Object value = change.get("value");
+            Object oldValue = change.get("oldValue");
+            Object newValue = change.get("newValue");
+
+            switch (changeType) {
+                case "added":
+                    lines.add("  + " + key + ": " + getFormattedValue(value));
+                    break;
+                case "removed":
+                    lines.add("  - " + key + ": " + getFormattedValue(value));
+                    break;
+                case "updated":
+                    lines.add("  - " + key + ": " + getFormattedValue(oldValue));
+                    lines.add("  + " + key + ": " + getFormattedValue(newValue));
+                    break;
+                case "unchanged":
+                    lines.add("    " + key + ": " + getFormattedValue(value));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown change type: " + changeType);
             }
         }
-        String[] lines = formatted.toString().split(System.lineSeparator());
-        Arrays.sort(lines, new KeyComparatorForStylishAndPlainFormats());
 
+        lines.sort(new KeyComparatorForStylishAndPlainFormats());
 
-        // Собрать отсортированный результат обратно в StringBuilder
         StringBuilder sortedSB = new StringBuilder("{\n");
         for (String line : lines) {
-            sortedSB.append(line).append(System.lineSeparator());
+            sortedSB.append(line).append("\n");
         }
         sortedSB.append("}");
 
@@ -48,7 +53,7 @@ public class StylishFormatter {
     }
 
     private static String getFormattedValue(Object value) {
-        if (value instanceof Object[] || value instanceof Arrays) {
+        if (value instanceof Object[] || value instanceof List) {
             return value.toString();
         } else {
             return String.valueOf(value).replace("'", "");

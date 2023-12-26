@@ -1,41 +1,37 @@
 package hexlet.code.formatters;
 
-import hexlet.code.KeyComparatorForStylishAndPlainFormats;
-import hexlet.code.OldAndNewValue;
+import hexlet.code.KeyComparatorForJsonFormat;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class PlainFormatter {
 
-    public static String format(Map<String, Object> diff) {
+    private static final String ADDED = "added";
+    private static final String REMOVED = "removed";
+    private static final String UPDATED = "updated";
+
+    public static String format(List<Map<String, Object>> diff) {
         StringBuilder formatted = new StringBuilder();
-        for (Map.Entry<String, Object> entry : diff.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            String[] parts = key.split(" ");
-            String updatedKey = parts[1];
-            if (key.startsWith("added")) {
+
+        diff.sort(new KeyComparatorForJsonFormat());
+
+        for (Map<String, Object> entry : diff) {
+            String name = clearKeyName(entry);
+            if (entry.containsKey(ADDED)) {
                 formatted.append(String.format("Property '%s' was added with value: %s%n",
-                        updatedKey, getFormattedValue(value)));
-            } else if (key.startsWith("removed")) {
-                formatted.append(String.format("Property '%s' was removed%n", updatedKey));
-            } else if (key.startsWith("updated")) {
-                OldAndNewValue oldAndNewValue = (OldAndNewValue) value;
+                        name, getFormattedValue(entry.get("value"))));
+            } else if (entry.containsKey(REMOVED)) {
+                formatted.append(String.format("Property '%s' was removed%n", name));
+            } else if (entry.containsKey(UPDATED)) {
                 formatted.append(String.format("Property '%s' was updated. From %s to %s%n",
-                        updatedKey,
-                        getFormattedValue(oldAndNewValue.oldValue()),
-                        getFormattedValue(oldAndNewValue.newValue())));
+                        name,
+                        getFormattedValue(entry.get("oldValue")),
+                        getFormattedValue(entry.get("newValue"))));
             }
         }
-        return getSortedDiff(formatted);
-    }
-
-    private static String getSortedDiff(StringBuilder formatted) {
-        String[] lines = formatted.toString().split(System.lineSeparator());
-        Arrays.sort(lines, new KeyComparatorForStylishAndPlainFormats());
-        return String.join(System.lineSeparator(), lines);
+        return formatted.toString().trim();
     }
 
     private static String getFormattedValue(Object value) {
@@ -48,5 +44,14 @@ public class PlainFormatter {
 
     private static boolean isComplexValue(String value) {
         return value.startsWith("[") || value.startsWith("{");
+    }
+
+    public static String clearKeyName(Map<String, Object> s) {
+        String changeType = s.keySet().stream()
+                .filter(key -> key.matches("added|removed|updated|unchanged"))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Invalid change type"));
+
+        return s.get(changeType).toString();
     }
 }
