@@ -8,16 +8,16 @@ import java.util.Objects;
 
 public class TreeBuilder {
     public static List<Map<String, Object>> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
-        List<Map<String, Object>> difference = new ArrayList<>(); // Изменено на List
+        List<Map<String, Object>> difference = new ArrayList<>();
 
-        compareAndBuildDifference(map1, map2, difference); // Теперь входной параметр - список
-        addAdditionalEntries(map1, map2, difference); // Теперь входной параметр - список
+        compareAndBuildDifference(map1, map2, difference);
+        addAdditionalEntries(map1, map2, difference);
         return difference;
     }
 
     private static void compareAndBuildDifference(Map<String, Object> map1,
                                                   Map<String, Object> map2,
-                                                  List<Map<String, Object>> difference) { // Теперь принимает List
+                                                  List<Map<String, Object>> difference) {
         for (Map.Entry<String, Object> entry : map1.entrySet()) {
             String key = entry.getKey();
             Object value1 = formatStringValues(entry.getValue());
@@ -31,8 +31,8 @@ public class TreeBuilder {
                                                 Object oldValue,
                                                 Object newValue,
                                                 Map<String, Object> map2,
-                                                List<Map<String, Object>> difference) { // Теперь принимает List
-        Map<String, Object> change = new HashMap<>(); // Создаём новую карту для каждого изменения
+                                                List<Map<String, Object>> difference) {
+        Map<String, Object> change = new HashMap<>();
         if (!map2.containsKey(key)) {
             change.put("value", oldValue);
             change.put("removed", key);
@@ -51,14 +51,14 @@ public class TreeBuilder {
 
     private static void addAdditionalEntries(Map<String, Object> map1,
                                              Map<String, Object> map2,
-                                             List<Map<String, Object>> difference) { // Теперь принимает List
+                                             List<Map<String, Object>> difference) {
         for (Map.Entry<String, Object> entry : map2.entrySet()) {
             String key = entry.getKey();
             if (!map1.containsKey(key)) {
                 Map<String, Object> added = new HashMap<>();
                 added.put("value", formatStringValues(entry.getValue()));
                 added.put("added", key);
-                difference.add(added); // Добавляем карту в список изменений
+                difference.add(added);
             }
         }
     }

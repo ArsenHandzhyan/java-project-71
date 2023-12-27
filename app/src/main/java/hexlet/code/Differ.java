@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 public final class Differ {
+    public static String generate(String filepath1, String filepath2) {
+        return generate(filepath1, filepath2, "stylish");
+    }
 
     public static String generate(String filepath1, String filepath2, String format) {
         try {
