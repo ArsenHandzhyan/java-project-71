@@ -16,9 +16,10 @@ To showcase the functionality of the library, you can compare two files by execu
 ```bash
 ./gradlew run --args='filepath1 filepath2'
 ```
-This command outputs a stylized illustration of the differences between the two JSON or YAML files. If you prefer a plain text or JSON-formatted display, use the `-f` or `--format` option followed by `plain` or `json`:
+This command outputs a stylized illustration of the differences between the two JSON or YAML files. If you prefer a plain text or JSON-formatted display, use the `-f` or `--format` option followed by `stylish`, `plain` or `json`:
 
 ```bash
+./gradlew run --args='filepath1 filepath2 --format stylish'
 ./gradlew run --args='filepath1 filepath2 --format plain'
 ./gradlew run --args='filepath1 filepath2 --format json'
 ```
@@ -34,6 +35,7 @@ Please consider that the above description provides a general understanding of t
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ArsenHandzhyan/java-project-71/actions)
+[![Java CI](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/main.yml/badge.svg)](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/main.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/825bb9f7e56f423fd834/maintainability)](https://codeclimate.com/github/ArsenHandzhyan/java-project-71/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/825bb9f7e56f423fd834/test_coverage)](https://codeclimate.com/github/ArsenHandzhyan/java-project-71/test_coverage)
 # Asciinema 
