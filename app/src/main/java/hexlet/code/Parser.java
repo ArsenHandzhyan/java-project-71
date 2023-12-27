@@ -10,7 +10,7 @@ import java.util.Map;
 public class Parser {
     public static Map<String, Object> parseJson(String content) throws IOException {
         var objectMapper = new ObjectMapper();
-        return objectMapper.readValue(content, new TypeReference<>() {});
+        return objectMapper.readValue(content, new TypeReference<>() { });
     }
 
     public static Map<String, Object> parseYaml(String content) {

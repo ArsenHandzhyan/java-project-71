@@ -19,7 +19,6 @@ public class JsonFormatter {
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(combinedMap));
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(combinedMap);
     }
 }
