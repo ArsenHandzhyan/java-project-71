@@ -1,7 +1,7 @@
 # Java-Project-71 
 
 ## Overview
-java-project-71 is an innovative Java library for comparing two JSON or YAML files. This tool is beneficial for developers who need to spot changes across different versions of a file or merge various pieces of software.
+java-project-71 is an innovative Java library for comparing two JSON or YAML files. This tool is beneficial for developers who need to spot changes across different versions of a file.
 
 ## Library
 This library allows the detection of differences between two input files and controls the output's formatting. It's created to be integrated with other software packages or utilities, giving them the capability to compare JSON or YAML files.
