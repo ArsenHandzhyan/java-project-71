@@ -9,6 +9,26 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TreeBuilder {
+    private static class DifferenceParams {
+        String key;
+        Object oldValue;
+        Object newValue;
+        Map<String, Object> map1;
+        Map<String, Object> map2;
+        List<Map<String, Object>> difference;
+
+        DifferenceParams(String key, Object oldValue, Object newValue,
+                         Map<String, Object> map1, Map<String, Object> map2,
+                         List<Map<String, Object>> difference) {
+            this.key = key;
+            this.oldValue = oldValue;
+            this.newValue = newValue;
+            this.map1 = map1;
+            this.map2 = map2;
+            this.difference = difference;
+        }
+    }
+
     public static List<Map<String, Object>> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
         List<Map<String, Object>> difference = new ArrayList<>();
 
@@ -20,33 +40,31 @@ public class TreeBuilder {
             Object oldValue = formatStringValues(map1.get(key));
             Object newValue = formatStringValues(map2.get(key));
 
-            compareAndAddDifference(key, oldValue, newValue, map1, map2, difference);
+            compareAndAddDifference(new DifferenceParams(key, oldValue, newValue, map1, map2, difference));
         }
 
         return difference;
     }
 
-    private static void compareAndAddDifference(String key, Object oldValue, Object newValue,
-                                                Map<String, Object> map1, Map<String, Object> map2,
-                                                List<Map<String, Object>> difference) {
+    private static void compareAndAddDifference(DifferenceParams params) {
         Map<String, Object> change = new HashMap<>();
 
-        if (!map2.containsKey(key)) {
-            change.put("removed", key);
-            change.put("value", oldValue);
-        } else if (!map1.containsKey(key)) {
-            change.put("added", key);
-            change.put("value", newValue);
-        } else if (!Objects.equals(newValue, oldValue)) {
-            change.put("updated", key);
-            change.put("newValue", newValue);
-            change.put("oldValue", oldValue);
+        if (!params.map2.containsKey(params.key)) {
+            change.put("removed", params.key);
+            change.put("value", params.oldValue);
+        } else if (!params.map1.containsKey(params.key)) {
+            change.put("added", params.key);
+            change.put("value", params.newValue);
+        } else if (!Objects.equals(params.newValue, params.oldValue)) {
+            change.put("updated", params.key);
+            change.put("newValue", params.newValue);
+            change.put("oldValue", params.oldValue);
         } else {
-            change.put("unchanged", key);
-            change.put("value", oldValue);
+            change.put("unchanged", params.key);
+            change.put("value", params.oldValue);
         }
 
-        difference.add(change);
+        params.difference.add(change);
     }
 
     public static Object formatStringValues(Object value) {
