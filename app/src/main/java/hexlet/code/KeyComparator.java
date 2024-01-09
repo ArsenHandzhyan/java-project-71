@@ -10,7 +10,7 @@ import java.util.Comparator;
  * /
  * The comparator ignores these formatting characters and sorts based on the key name.
  */
-public final class KeyComparatorForStylishAndPlainFormats implements Comparator<String> {
+public final class KeyComparator implements Comparator<String> {
 
     /**
      * Compares two strings using their extracted keys.
