@@ -1,6 +1,5 @@
 package hexlet.code;
 
-import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -10,8 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -31,7 +30,7 @@ public final class DifferTest {
     private static String generateStylishDiff;
 
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() throws Exception {
         String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
         String resultJsonPath = "src/test/resources/fixtures/result_json.json";
         String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
@@ -56,7 +55,7 @@ public final class DifferTest {
     }
 
     @Test
-    public void testEmptyFile() {
+    public void testEmptyFile() throws Exception {
         String actual = generate(YML_1_PATH, EMPTY_JSON_PATH, "stylish");
         assertEquals(resultStylishEmpty, actual);
     }
@@ -68,29 +67,29 @@ public final class DifferTest {
 
     @Test
     public void testEmptyPath() {
-        assertThrows(RuntimeException.class, () -> generate(YML_1_PATH, EMPTY_PATH, "stylish"));
+        assertThrows(IOException.class, () -> generate(YML_1_PATH, EMPTY_PATH, "stylish"));
     }
 
     @Test
-    public void testSingleKeyValuePair() {
+    public void testSingleKeyValuePair() throws Exception {
         String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testCompletelyDifferentFiles() {
+    public void testCompletelyDifferentFiles() throws Exception {
         String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
         assertFalse(actual.isEmpty());
     }
 
     @Test
-    public void testPlainFormat() {
+    public void testPlainFormat() throws Exception {
         String actual = generate(YML_1_PATH, YML_2_PATH, "plain");
         assertEquals(resultPlain, actual);
     }
 
     @Test
-    public void testJsonFormat() throws JSONException {
+    public void testJsonFormat() throws Exception {
         String actual = generate(YML_1_PATH, YML_2_PATH, "json");
         JSONAssert.assertEquals(resultJson, actual, false);
     }
