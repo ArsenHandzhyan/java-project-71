@@ -35,16 +35,6 @@ We employ JUnit for library testing and Jacoco for generating coverage reports, 
 
 ## Linting
 This project maintains code quality and standards using the Checkstyle tool, integrated via Gradle. This ensures that the codebase remains clean, organized, and follows consistent coding standards.
-Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
-Файл не выбран
-Attach files by dragging & dropping, selecting or pasting them.
-Editing java-project-71/README.md at main · ArsenHandzhyan/java-project-71
-
-английский
-
-
-Please consider that the above description provides a general understanding of this library's functions and use cases. The actual functionality and application may vary based on the specifications and requirements of the individual projects integrating it.
-
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ArsenHandzhyan/java-project-71/actions)
