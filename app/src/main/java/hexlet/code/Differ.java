@@ -1,7 +1,6 @@
 package hexlet.code;
 
 import hexlet.code.formatters.Formatter;
-import hexlet.code.formatters.UnsupportedFormatException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,24 +8,18 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 public final class Differ {
-    public static String generate(String filepath1, String filepath2) {
+    public static String generate(String filepath1, String filepath2) throws Exception {
         return generate(filepath1, filepath2, "stylish");
     }
 
-    public static String generate(String filepath1, String filepath2, String format) {
-        try {
-            var content1 = readFileContent(filepath1);
-            var content2 = readFileContent(filepath2);
-            var map1 = parse(content1, getFileExtension(filepath1));
-            var map2 = parse(content2, getFileExtension(filepath2));
+    public static String generate(String filepath1, String filepath2, String format) throws Exception {
+        var content1 = readFileContent(filepath1);
+        var content2 = readFileContent(filepath2);
+        var map1 = parse(content1, getFileExtension(filepath1));
+        var map2 = parse(content2, getFileExtension(filepath2));
 
-            var diff = TreeBuilder.buildTree(map1, map2);
-            return Formatter.formatterSelection(format, diff);
-        } catch (IOException e) {
-            throw new RuntimeException("Error processing input file", e);
-        } catch (UnsupportedFormatException e) {
-            throw new RuntimeException(e);
-        }
+        var diff = TreeBuilder.buildTree(map1, map2);
+        return Formatter.formatterSelection(format, diff);
     }
 
     private static Map<String, Object> parse(String content, String fileType) throws IOException {
