@@ -1,7 +1,5 @@
 package hexlet.code.formatters;
 
-import hexlet.code.KeyComparatorForStylishAndPlainFormats;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +8,6 @@ public class StylishFormatter {
 
     public static String format(List<Map<String, Object>> diff) {
         List<String> lines = buildFormattedLines(diff);
-        lines.sort(new KeyComparatorForStylishAndPlainFormats());
         return buildFormattedOutput(lines);
     }
 
