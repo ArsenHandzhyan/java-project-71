@@ -9,24 +9,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TreeBuilder {
-    private static class DifferenceParams {
-        String key;
-        Object oldValue;
-        Object newValue;
-        Map<String, Object> map1;
-        Map<String, Object> map2;
-        List<Map<String, Object>> difference;
-
-        DifferenceParams(String key, Object oldValue, Object newValue,
-                         Map<String, Object> map1, Map<String, Object> map2,
-                         List<Map<String, Object>> difference) {
-            this.key = key;
-            this.oldValue = oldValue;
-            this.newValue = newValue;
-            this.map1 = map1;
-            this.map2 = map2;
-            this.difference = difference;
-        }
+    private record DifferenceParams(String key, Object oldValue, Object newValue, Map<String, Object> map1,
+                                    Map<String, Object> map2, List<Map<String, Object>> difference) {
     }
 
     public static List<Map<String, Object>> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
