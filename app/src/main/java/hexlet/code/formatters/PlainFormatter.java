@@ -1,7 +1,5 @@
 package hexlet.code.formatters;
 
-import hexlet.code.KeyComparatorForJsonFormat;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,8 +12,6 @@ public class PlainFormatter {
 
     public static String format(List<Map<String, Object>> diff) {
         StringBuilder formatted = new StringBuilder();
-
-        diff.sort(new KeyComparatorForJsonFormat());
 
         for (Map<String, Object> entry : diff) {
             String name = clearKeyName(entry);
