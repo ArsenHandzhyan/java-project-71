@@ -1,73 +1,57 @@
-{
-  "change0" : {
-    "unchanged" : "chars1",
-    "value" : [ "a", "b", "c" ]
-  },
-  "change1" : {
-    "newValue" : false,
-    "oldValue" : [ "d", "e", "f" ],
-    "updated" : "chars2"
-  },
-  "change2" : {
-    "newValue" : true,
-    "oldValue" : false,
-    "updated" : "checked"
-  },
-  "change3" : {
-    "newValue" : [ "value1", "value2" ],
-    "oldValue" : null,
-    "updated" : "default"
-  },
-  "change4" : {
-    "newValue" : null,
-    "oldValue" : 45,
-    "updated" : "id"
-  },
-  "change5" : {
-    "removed" : "key1",
-    "value" : "'value1'"
-  },
-  "change6" : {
-    "added" : "key2",
-    "value" : "'value2'"
-  },
-  "change7" : {
-    "unchanged" : "numbers1",
-    "value" : [ 1, 2, 3, 4 ]
-  },
-  "change8" : {
-    "newValue" : [ 22, 33, 44, 55 ],
-    "oldValue" : [ 2, 3, 4, 5 ],
-    "updated" : "numbers2"
-  },
-  "change9" : {
-    "removed" : "numbers3",
-    "value" : [ 3, 4, 5 ]
-  },
-  "change10" : {
-    "added" : "numbers4",
-    "value" : [ 4, 5, 6 ]
-  },
-  "change11" : {
-    "added" : "obj1",
-    "value" : {
-      "nestedKey" : "value",
-      "isNested" : true
-    }
-  },
-  "change12" : {
-    "newValue" : "'Another value'",
-    "oldValue" : "'Some value'",
-    "updated" : "setting1"
-  },
-  "change13" : {
-    "newValue" : 300,
-    "oldValue" : 200,
-    "updated" : "setting2"
-  },
-  "change14" : {
-    "newValue" : "'none'",
-    "oldValue" : true,
-    "updated" : "setting3"
+[ {
+  "unchanged" : "chars1",
+  "value" : [ "a", "b", "c" ]
+}, {
+  "newValue" : false,
+  "oldValue" : [ "d", "e", "f" ],
+  "updated" : "chars2"
+}, {
+  "newValue" : true,
+  "oldValue" : false,
+  "updated" : "checked"
+}, {
+  "newValue" : [ "value1", "value2" ],
+  "oldValue" : null,
+  "updated" : "default"
+}, {
+  "newValue" : null,
+  "oldValue" : 45,
+  "updated" : "id"
+}, {
+  "removed" : "key1",
+  "value" : "'value1'"
+}, {
+  "added" : "key2",
+  "value" : "'value2'"
+}, {
+  "unchanged" : "numbers1",
+  "value" : [ 1, 2, 3, 4 ]
+}, {
+  "newValue" : [ 22, 33, 44, 55 ],
+  "oldValue" : [ 2, 3, 4, 5 ],
+  "updated" : "numbers2"
+}, {
+  "removed" : "numbers3",
+  "value" : [ 3, 4, 5 ]
+}, {
+  "added" : "numbers4",
+  "value" : [ 4, 5, 6 ]
+}, {
+  "added" : "obj1",
+  "value" : {
+    "nestedKey" : "value",
+    "isNested" : true
   }
-}
+}, {
+  "newValue" : "'Another value'",
+  "oldValue" : "'Some value'",
+  "updated" : "setting1"
+}, {
+  "newValue" : 300,
+  "oldValue" : 200,
+  "updated" : "setting2"
+}, {
+  "newValue" : "'none'",
+  "oldValue" : true,
+  "updated" : "setting3"
+} ]
