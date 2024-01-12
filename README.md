@@ -20,8 +20,18 @@ This command outputs a stylized illustration of the differences between the two 
 
 ```bash
 ./gradlew run --args='filepath1 filepath2 --format stylish'
+```
+```bash
 ./gradlew run --args='filepath1 filepath2 --format plain'
+```
+```bash
 ./gradlew run --args='filepath1 filepath2 --format json'
+```
+Usage with Help Flag
+For detailed information on using the library and its options, you can utilize the --help flag:
+
+```bash
+./gradlew run --args='--help'
 ```
 
 ## Testing
@@ -33,12 +43,12 @@ This project maintains code quality and standards using the Checkstyle tool, int
 Please consider that the above description provides a general understanding of this library's functions and use cases. The actual functionality and application may vary based on the specifications and requirements of the individual projects integrating it.
 
 
-### Hexlet tests and linter status:
+## Hexlet tests and linter status:
 [![Actions Status](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ArsenHandzhyan/java-project-71/actions)
 [![Java CI](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/main.yml/badge.svg)](https://github.com/ArsenHandzhyan/java-project-71/actions/workflows/main.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/825bb9f7e56f423fd834/maintainability)](https://codeclimate.com/github/ArsenHandzhyan/java-project-71/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/825bb9f7e56f423fd834/test_coverage)](https://codeclimate.com/github/ArsenHandzhyan/java-project-71/test_coverage)
-# Asciinema 
+## Asciinema 
 [![asciicast](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs.svg)](https://asciinema.org/a/Z56GUpiTQyTxtCX4DkVKtDfQs)
 [![asciicast](https://asciinema.org/a/IwqbjoI41sXeFt2B6q9LSuCOp.svg)](https://asciinema.org/a/IwqbjoI41sXeFt2B6q9LSuCOp)
 [![asciicast](https://asciinema.org/a/64PIVbCTrUCj5tIQM4Z1FyaQa.svg)](https://asciinema.org/a/64PIVbCTrUCj5tIQM4Z1FyaQa)
