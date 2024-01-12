@@ -32,19 +32,23 @@ public class TreeBuilder {
 
     private static void compareAndAddDifference(DifferenceParams params) {
         Map<String, Object> change = new HashMap<>();
-
+        String key = (String) formatStringValues(params.key);
         if (!params.map2.containsKey(params.key)) {
-            change.put("removed", params.key);
+            change.put("key", key);
+            change.put("type", "removed");
             change.put("value", params.oldValue);
         } else if (!params.map1.containsKey(params.key)) {
-            change.put("added", params.key);
+            change.put("key", key);
+            change.put("type", "added");
             change.put("value", params.newValue);
         } else if (!Objects.equals(params.newValue, params.oldValue)) {
-            change.put("updated", params.key);
+            change.put("key", key);
+            change.put("type", "updated");
             change.put("newValue", params.newValue);
             change.put("oldValue", params.oldValue);
         } else {
-            change.put("unchanged", params.key);
+            change.put("key", key);
+            change.put("type", "unchanged");
             change.put("value", params.oldValue);
         }
 

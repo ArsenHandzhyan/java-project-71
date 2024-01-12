@@ -5,26 +5,29 @@ import java.util.Map;
 import java.util.Objects;
 
 public class PlainFormatter {
-
-    private static final String ADDED = "added";
-    private static final String REMOVED = "removed";
-    private static final String UPDATED = "updated";
-
     public static String format(List<Map<String, Object>> diff) {
         StringBuilder formatted = new StringBuilder();
 
         for (Map<String, Object> entry : diff) {
-            String name = clearKeyName(entry);
-            if (entry.containsKey(ADDED)) {
-                formatted.append(String.format("Property '%s' was added with value: %s%n",
-                        name, getFormattedValue(entry.get("value"))));
-            } else if (entry.containsKey(REMOVED)) {
-                formatted.append(String.format("Property '%s' was removed%n", name));
-            } else if (entry.containsKey(UPDATED)) {
-                formatted.append(String.format("Property '%s' was updated. From %s to %s%n",
-                        name,
-                        getFormattedValue(entry.get("oldValue")),
-                        getFormattedValue(entry.get("newValue"))));
+            String name = (String) entry.get("key");
+            String changeType = (String) entry.get("type");
+            String formattedValue = getFormattedValue(entry.get("value"));
+            String formattedOldValue = getFormattedValue(entry.get("oldValue"));
+            String formattedNewValue = getFormattedValue(entry.get("newValue"));
+            switch (changeType) {
+                case "added":
+                    formatted.append(String.format("Property " + name + " was added with value: " + formattedValue)).append("\n");
+                    break;
+                case "removed":
+                    formatted.append(String.format("Property " + name + " was removed", name)).append("\n");
+                    break;
+                case "updated":
+                    formatted.append(String.format("Property " + name + " was updated. From " + formattedOldValue + " to " + formattedNewValue)).append("\n");
+                    break;
+                case "unchanged":
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown change type: " + changeType);
             }
         }
         return formatted.toString().trim();
@@ -40,14 +43,5 @@ public class PlainFormatter {
 
     private static boolean isComplexValue(String value) {
         return value.startsWith("[") || value.startsWith("{");
-    }
-
-    public static String clearKeyName(Map<String, Object> s) {
-        String changeType = s.keySet().stream()
-                .filter(key -> key.matches("added|removed|updated|unchanged"))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Invalid change type"));
-
-        return s.get(changeType).toString();
     }
 }

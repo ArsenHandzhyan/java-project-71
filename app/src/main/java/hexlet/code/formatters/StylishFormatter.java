@@ -20,8 +20,8 @@ public class StylishFormatter {
     private static List<String> formatChange(Map<String, Object> change) {
         List<String> formattedLines = new ArrayList<>();
 
-        String changeType = getChangeType(change);
-        String key = change.get(changeType).toString();
+        String changeType = (String) change.get("type");
+        String key = getFormattedValue(change.get("key"));
         String formattedValue = getFormattedValue(change.get("value"));
         String formattedOldValue = getFormattedValue(change.get("oldValue"));
         String formattedNewValue = getFormattedValue(change.get("newValue"));
@@ -44,13 +44,6 @@ public class StylishFormatter {
                 throw new IllegalArgumentException("Unknown change type: " + changeType);
         }
         return formattedLines;
-    }
-
-    private static String getChangeType(Map<String, Object> change) {
-        return change.keySet().stream()
-                .filter(key -> key.matches("added|removed|updated|unchanged"))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Invalid change type"));
     }
 
     private static String formatLine(String prefix, String key, String value) {
