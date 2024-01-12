@@ -8,6 +8,10 @@ import java.util.Map;
 public class Formatter {
     public static String formatterSelection(String format, List<Map<String, Object>> diff)
             throws JsonProcessingException, UnsupportedFormatException {
+        if (format == null) {
+            throw new UnsupportedFormatException("Null format");
+        }
+
         return switch (format.toLowerCase()) {
             case "stylish" -> StylishFormatter.format(diff);
             case "plain" -> PlainFormatter.format(diff);

@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.formatters.UnsupportedFormatException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,10 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class DifferTest {
     private static final String YML_1_PATH = "src/test/resources/fixtures/file1.yml";
@@ -99,6 +97,58 @@ public final class DifferTest {
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> generate(YML_1_PATH, YML_2_PATH, "json"));
+    }
+
+    @Test
+    public void testMixedStructuresStylishFormatWithJson() throws Exception {
+        String actual = generate(YML_1_PATH, NESTED_STRUCTURES2, "stylish");
+        assertEquals(resultStylish, actual);
+    }
+
+    @Test
+    public void testMixedStructuresStylishFormatWithYaml() throws Exception {
+        String actual = generate(NESTED_STRUCTURES1, YML_2_PATH, "stylish");
+        assertEquals(resultStylish, actual);
+    }
+
+    @Test
+    public void testGenerateWithInvalidFormat() {
+        assertThrows(UnsupportedFormatException.class, () -> generate(YML_1_PATH, YML_2_PATH, "invalidFormat"));
+    }
+
+    @Test
+    public void testGenerateWithNullFormat() {
+        assertThrows(UnsupportedFormatException.class, () -> generate(YML_1_PATH, YML_2_PATH, null));
+    }
+
+    @Test
+    public void testGenerateWithEmptyFormat() {
+        assertThrows(UnsupportedFormatException.class, () -> generate(YML_1_PATH, YML_2_PATH, ""));
+    }
+
+    @Test
+    public void testGenerateWithNullPath() {
+        assertThrows(NullPointerException.class, () -> generate(null, YML_2_PATH, "stylish"));
+    }
+
+    @Test
+    public void testGenerateWithEmptyPath() {
+        assertThrows(IOException.class, () -> generate("", YML_2_PATH, "stylish"));
+    }
+
+    @Test
+    public void testGenerateWithNonexistentPath() {
+        assertThrows(IOException.class, () -> generate("nonexistent.yml", YML_2_PATH, "stylish"));
+    }
+
+    @Test
+    public void testGenerateWithNullPaths() {
+        assertThrows(NullPointerException.class, () -> generate(null, null, "stylish"));
+    }
+
+    @Test
+    public void testGenerateWithEmptyPaths() {
+        assertThrows(IOException.class, () -> generate("", "", "stylish"));
     }
 
     private void assertGeneratedOutputMatchesExpected(String format, String expected) throws Exception {
