@@ -16,7 +16,7 @@ public class TreeBuilder {
     public static List<Map<String, Object>> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
         List<Map<String, Object>> difference = new ArrayList<>();
 
-        Set<String> allKeys = new TreeSet<>(new KeyComparator());
+        Set<String> allKeys = new TreeSet<>();
         allKeys.addAll(map1.keySet());
         allKeys.addAll(map2.keySet());
 
