@@ -57,11 +57,6 @@ public final class DifferTest {
     }
 
     @Test
-    public void testYamlComparison() {
-        assertFalse(generateStylishDiffWithJson.isEmpty());
-    }
-
-    @Test
     public void testWithoutJson() {
         assertEquals(resultStylish, generateStylishDiffWithJson);
     }
@@ -72,19 +67,9 @@ public final class DifferTest {
     }
 
     @Test
-    public void testTwoArguments() {
-        assertEquals(resultStylish, generateStylishDiffWithJson);
-    }
-
-    @Test
     public void testMixedStructuresStylishFormat() throws Exception {
         String actual = generate(YML_1_PATH, NESTED_STRUCTURES2, "stylish");
         assertEquals(resultStylish, actual);
-    }
-
-    @Test
-    public void testEmptyPath() {
-        assertThrows(IOException.class, () -> generate(YML_1_PATH, EMPTY_PATH, "stylish"));
     }
 
     @Test
@@ -100,6 +85,35 @@ public final class DifferTest {
     @Test
     public void testGenerate() {
         assertDoesNotThrow(() -> generate(YML_1_PATH, YML_2_PATH, "json"));
+    }
+
+    private void assertGeneratedOutputMatchesExpected(String format, String expected) throws Exception {
+        String actual = generate(NESTED_STRUCTURES1, NESTED_STRUCTURES2, format);
+        assertEquals(expected, actual);
+    }
+
+    private String readResourceFile(String path) throws IOException {
+        return Files.readString(Paths.get(path));
+    }
+
+    @Test
+    public void testYamlComparison() {
+        assertFalse(generateStylishDiffWithJson.isEmpty());
+    }
+
+    @Test
+    public void testWithout() {
+        assertEquals(resultStylish, generateStylishDiffWithJson);
+    }
+
+    @Test
+    public void testTwoArguments() {
+        assertEquals(resultStylish, generateStylishDiffWithJson);
+    }
+
+    @Test
+    public void testEmptyPath() {
+        assertThrows(IOException.class, () -> generate(YML_1_PATH, EMPTY_PATH, "stylish"));
     }
 
     @Test
@@ -152,14 +166,5 @@ public final class DifferTest {
     @Test
     public void testGenerateWithEmptyPaths() {
         assertThrows(IOException.class, () -> generate("", "", "stylish"));
-    }
-
-    private void assertGeneratedOutputMatchesExpected(String format, String expected) throws Exception {
-        String actual = generate(NESTED_STRUCTURES1, NESTED_STRUCTURES2, format);
-        assertEquals(expected, actual);
-    }
-
-    private String readResourceFile(String path) throws IOException {
-        return Files.readString(Paths.get(path));
     }
 }
