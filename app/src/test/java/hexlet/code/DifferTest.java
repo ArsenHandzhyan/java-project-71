@@ -9,13 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class DifferTest {
-
     private static final String YML_1_PATH = "src/test/resources/fixtures/file1.yml";
     private static final String YML_2_PATH = "src/test/resources/fixtures/file2.yml";
     private static final String EMPTY_JSON_PATH = "src/test/resources/fixtures/emptyJson.json";

@@ -1,11 +1,11 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.type.*;
-import com.fasterxml.jackson.databind.*;
-import org.yaml.snakeyaml.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.yaml.snakeyaml.Yaml;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Map;
 
 public class Parser {
     public static Map<String, Object> parse(String content, String fileType) throws IOException {

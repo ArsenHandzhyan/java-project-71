@@ -22,7 +22,6 @@ public final class Differ {
     }
 
 
-
     private static String readFileContent(String filepath) throws IOException {
         var path = Paths.get(filepath);
         return Files.readString(resolvePath(path));
