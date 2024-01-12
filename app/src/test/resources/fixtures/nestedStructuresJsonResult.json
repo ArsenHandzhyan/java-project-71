@@ -1,0 +1,18 @@
+[ {
+  "newValue" : {
+    "key" : "another_value",
+    "inner" : {
+      "prop1" : 456,
+      "prop3" : "hello"
+    }
+  },
+  "oldValue" : {
+    "key" : "value",
+    "inner" : {
+      "prop1" : 123,
+      "prop2" : true
+    }
+  },
+  "type" : "updated",
+  "key" : "'nested'"
+} ]

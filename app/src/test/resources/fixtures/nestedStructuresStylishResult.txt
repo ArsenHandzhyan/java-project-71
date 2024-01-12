@@ -1,0 +1,4 @@
+{
+  - nested: {key=value, inner={prop1=123, prop2=true}}
+  + nested: {key=another_value, inner={prop1=456, prop3=hello}}
+}

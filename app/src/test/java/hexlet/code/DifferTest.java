@@ -44,6 +44,39 @@ public final class DifferTest {
     }
 
     @Test
+    public void testNestedStructuresPlainFormat() throws Exception {
+        String actual = generate(
+                "src/test/resources/fixtures/nestedStructures1.yml",
+                "src/test/resources/fixtures/nestedStructures2.yml",
+                "plain");
+        String expected = Files.readString(Paths.get(
+                "src/test/resources/fixtures/nestedStructuresPlainResult.txt"));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testNestedStructuresStylishFormat() throws Exception {
+        String actual = generate(
+                "src/test/resources/fixtures/nestedStructures1.yml",
+                "src/test/resources/fixtures/nestedStructures2.yml",
+                "stylish");
+        String expected = Files.readString(Paths.get(
+                "src/test/resources/fixtures/nestedStructuresStylishResult.txt"));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testNestedStructuresJsonFormat() throws Exception {
+        String actual = generate(
+                "src/test/resources/fixtures/nestedStructures1.yml",
+                "src/test/resources/fixtures/nestedStructures2.yml",
+                "json");
+        String expected = Files.readString(Paths.get(
+                "src/test/resources/fixtures/nestedStructuresJsonResult.json"));
+        JSONAssert.assertEquals(expected, actual, false);
+    }
+
+    @Test
     public void testYamlComparison() {
         assertFalse(generateStylishDiff.isEmpty());
     }

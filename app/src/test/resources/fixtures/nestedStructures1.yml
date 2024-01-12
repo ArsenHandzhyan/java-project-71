@@ -1,0 +1,5 @@
+nested:
+    key: value
+    inner:
+        prop1: 123
+        prop2: true

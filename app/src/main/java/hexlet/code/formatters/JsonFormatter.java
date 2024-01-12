@@ -10,7 +10,6 @@ public class JsonFormatter {
 
     public static String format(List<Map<String, Object>> diff) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(diff));
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(diff);
     }
 }
