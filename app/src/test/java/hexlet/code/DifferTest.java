@@ -19,9 +19,9 @@ public final class DifferTest {
     private static final String NESTED_STRUCTURES1 = "src/test/resources/fixtures/nestedStructures1.json";
     private static final String NESTED_STRUCTURES2 = "src/test/resources/fixtures/nestedStructures2.json";
     private static final String EMPTY_PATH = "";
-    private static final String NESTED_STRUCTURES_PLAIN_RESULT = "src/test/resources/fixtures/nestedStructuresPlainResult.txt";
-    private static final String NESTED_STRUCTURES_JSON_RESULT = "src/test/resources/fixtures/nestedStructuresJsonResult.json";
-    private static final String NESTED_STRUCTURES_STYLISH_RESULT = "src/test/resources/fixtures/nestedStructuresStylishResult.txt";
+    private static final String PLAIN_RESULT = "src/test/resources/fixtures/nestedStructuresPlainResult.txt";
+    private static final String JSON_RESULT = "src/test/resources/fixtures/nestedStructuresJsonResult.json";
+    private static final String STYLISH_RESULT = "src/test/resources/fixtures/nestedStructuresStylishResult.txt";
 
     private static String resultPlain;
     private static String resultStylish;
@@ -32,9 +32,9 @@ public final class DifferTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        resultPlain = readResourceFile(NESTED_STRUCTURES_PLAIN_RESULT);
-        resultStylish = readResourceFile(NESTED_STRUCTURES_STYLISH_RESULT);
-        resultJson = readResourceFile(NESTED_STRUCTURES_JSON_RESULT);
+        resultPlain = readResourceFile(PLAIN_RESULT);
+        resultStylish = readResourceFile(STYLISH_RESULT);
+        resultJson = readResourceFile(JSON_RESULT);
 
         generateStylishDiffWithJson = generate(NESTED_STRUCTURES1, NESTED_STRUCTURES2, "stylish");
         generateStylishDiffWithYml = generate(YML_1_PATH, YML_2_PATH, "stylish");
@@ -98,7 +98,7 @@ public final class DifferTest {
 
     @Test
     public void testGenerate() {
-        assertDoesNotThrow(() -> generate(YML_1_PATH, YML_2_PATH, "plain"));
+        assertDoesNotThrow(() -> generate(YML_1_PATH, YML_2_PATH, "json"));
     }
 
     private void assertGeneratedOutputMatchesExpected(String format, String expected) throws Exception {
