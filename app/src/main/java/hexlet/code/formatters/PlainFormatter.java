@@ -14,22 +14,28 @@ public class PlainFormatter {
             String formattedValue = getFormattedValue(entry.get("value"));
             String formattedOldValue = getFormattedValue(entry.get("oldValue"));
             String formattedNewValue = getFormattedValue(entry.get("newValue"));
+
             switch (changeType) {
                 case "added":
-                    formatted.append(String.format("Property " + name + " was added with value: " + formattedValue)).append("\n");
+                    formatted.append(String.format("Property %s was added with value: %s%n",
+                            name, formattedValue));
                     break;
                 case "removed":
-                    formatted.append(String.format("Property " + name + " was removed", name)).append("\n");
+                    formatted.append(String.format("Property %s was removed%n",
+                            name));
                     break;
                 case "updated":
-                    formatted.append(String.format("Property " + name + " was updated. From " + formattedOldValue + " to " + formattedNewValue)).append("\n");
+                    formatted.append(String.format("Property %s was updated. From %s to %s%n",
+                            name, formattedOldValue, formattedNewValue));
                     break;
                 case "unchanged":
+                    // don't use in this formatter
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown change type: " + changeType);
             }
         }
+
         return formatted.toString().trim();
     }
 
