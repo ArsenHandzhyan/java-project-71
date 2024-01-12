@@ -14,7 +14,6 @@ public class PlainFormatter {
             String formattedValue = getFormattedValue(entry.get("value"));
             String formattedOldValue = getFormattedValue(entry.get("oldValue"));
             String formattedNewValue = getFormattedValue(entry.get("newValue"));
-
             switch (changeType) {
                 case "added":
                     formatted.append(String.format("Property %s was added with value: %s%n",
