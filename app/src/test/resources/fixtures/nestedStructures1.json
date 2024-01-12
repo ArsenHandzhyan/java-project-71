@@ -10,5 +10,12 @@
     "checked": false,
     "numbers3": [3, 4, 5],
     "chars1": ["a", "b", "c"],
-    "chars2": ["d", "e", "f"]
+    "chars2": ["d", "e", "f"],
+    "nested": {
+        "key": "another_value",
+        "inner": {
+            "prop1": 456,
+            "prop3": "hello"
+        }
+    }
 }

@@ -31,6 +31,23 @@
   "value" : "'value2'",
   "key" : "key2"
 }, {
+  "newValue" : {
+    "key" : "value",
+    "inner" : {
+      "prop1" : 123,
+      "prop2" : true
+    }
+  },
+  "oldValue" : {
+    "key" : "another_value",
+    "inner" : {
+      "prop1" : 456,
+      "prop3" : "hello"
+    }
+  },
+  "type" : "updated",
+  "key" : "nested"
+}, {
   "type" : "unchanged",
   "value" : [ 1, 2, 3, 4 ],
   "key" : "numbers1"

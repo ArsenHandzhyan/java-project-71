@@ -5,6 +5,7 @@
   - default: null
   - id: 45
   - key1: value1
+  - nested: {key=another_value, inner={prop1=456, prop3=hello}}
   - numbers1: [1, 2, 3, 4]
   - numbers2: [2, 3, 4, 5]
   - numbers3: [3, 4, 5]

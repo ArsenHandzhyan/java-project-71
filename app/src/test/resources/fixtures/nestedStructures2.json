@@ -14,5 +14,12 @@
   "obj1": {
     "nestedKey": "value",
     "isNested": true
+  },
+  "nested": {
+    "key": "value",
+    "inner": {
+      "prop1": 123,
+      "prop2": true
+    }
   }
 }
