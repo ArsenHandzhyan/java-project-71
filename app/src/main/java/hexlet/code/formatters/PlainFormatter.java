@@ -7,7 +7,6 @@ import java.util.Objects;
 public class PlainFormatter {
     public static String format(List<Map<String, Object>> diff) {
         StringBuilder formatted = new StringBuilder();
-
         for (Map<String, Object> entry : diff) {
             String name = "'" + entry.get("key") + "'";
             String changeType = (String) entry.get("type");

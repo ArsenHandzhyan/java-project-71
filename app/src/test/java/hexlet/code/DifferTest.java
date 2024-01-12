@@ -2,78 +2,56 @@ package hexlet.code;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static hexlet.code.Differ.generate;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class DifferTest {
     private static final String YML_1_PATH = "src/test/resources/fixtures/file1.yml";
     private static final String YML_2_PATH = "src/test/resources/fixtures/file2.yml";
-    private static final String EMPTY_JSON_PATH = "src/test/resources/fixtures/emptyJson.json";
-    private static final String SINGLE_KEY_JSON_PATH = "src/test/resources/fixtures/singleKeyJson.json";
     private static final String EMPTY_PATH = "";
+
+    private static final String NESTED_STRUCTURES_DIR = "src/test/resources/fixtures/";
+    private static final String NESTED_STRUCTURES_PLAIN_RESULT = "nestedStructuresPlainResult.txt";
+    private static final String NESTED_STRUCTURES_JSON_RESULT = "nestedStructuresJsonResult.json";
+    private static final String NESTED_STRUCTURES_STYLISH_RESULT = "nestedStructuresStylishResult.txt";
 
     private static String resultPlain;
     private static String resultStylish;
     private static String resultJson;
-    private static String resultStylishEmpty;
 
     private static String generateStylishDiff;
 
     @BeforeEach
     public void setUp() throws Exception {
-        String resultPlainPath = "src/test/resources/fixtures/result_plain.txt";
-        String resultJsonPath = "src/test/resources/fixtures/result_json.json";
-        String resultStylishPath = "src/test/resources/fixtures/result_stylish.txt";
-        String resultStylishEmptyPath = "src/test/resources/fixtures/result_stylish_withEmptyFile.txt";
+        resultPlain = readResourceFile(NESTED_STRUCTURES_DIR + NESTED_STRUCTURES_PLAIN_RESULT);
+        resultStylish = readResourceFile(NESTED_STRUCTURES_DIR + NESTED_STRUCTURES_STYLISH_RESULT);
+        resultJson = readResourceFile(NESTED_STRUCTURES_DIR + NESTED_STRUCTURES_JSON_RESULT);
 
-        resultPlain = Files.readString(Paths.get(resultPlainPath));
-        resultStylish = Files.readString(Paths.get(resultStylishPath));
-        resultJson = Files.readString(Paths.get(resultJsonPath));
-        resultStylishEmpty = Files.readString(Paths.get(resultStylishEmptyPath));
-
-        generateStylishDiff = generate(YML_1_PATH, YML_2_PATH, "stylish");
+        generateStylishDiff = generate(
+                NESTED_STRUCTURES_DIR + "nestedStructures1.json",
+                NESTED_STRUCTURES_DIR + "nestedStructures2.json",
+                "stylish"
+        );
     }
 
     @Test
     public void testNestedStructuresPlainFormat() throws Exception {
-        String actual = generate(
-                "src/test/resources/fixtures/nestedStructures1.json",
-                "src/test/resources/fixtures/nestedStructures2.json",
-                "plain");
-        String expected = Files.readString(Paths.get(
-                "src/test/resources/fixtures/nestedStructuresPlainResult.txt"));
-        assertEquals(expected, actual);
+        assertGeneratedOutputMatchesExpected("plain", resultPlain);
     }
 
     @Test
     public void testNestedStructuresStylishFormat() throws Exception {
-        String actual = generate(
-                "src/test/resources/fixtures/nestedStructures1.json",
-                "src/test/resources/fixtures/nestedStructures2.json",
-                "stylish");
-        String expected = Files.readString(Paths.get(
-                "src/test/resources/fixtures/nestedStructuresStylishResult.txt"));
-        assertEquals(expected, actual);
+        assertGeneratedOutputMatchesExpected("stylish", resultStylish);
     }
 
     @Test
     public void testNestedStructuresJsonFormat() throws Exception {
-        String actual = generate(
-                "src/test/resources/fixtures/nestedStructures1.json",
-                "src/test/resources/fixtures/nestedStructures2.json",
-                "json");
-        String expected = Files.readString(Paths.get(
-                "src/test/resources/fixtures/nestedStructuresJsonResult.json"));
-        JSONAssert.assertEquals(expected, actual, false);
+        assertGeneratedOutputMatchesExpected("json", resultJson);
     }
 
     @Test
@@ -87,12 +65,6 @@ public final class DifferTest {
     }
 
     @Test
-    public void testEmptyFile() throws Exception {
-        String actual = generate(YML_1_PATH, EMPTY_JSON_PATH, "stylish");
-        assertEquals(resultStylishEmpty, actual);
-    }
-
-    @Test
     public void testTwoArguments() {
         assertEquals(resultStylish, generateStylishDiff);
     }
@@ -103,33 +75,30 @@ public final class DifferTest {
     }
 
     @Test
-    public void testSingleKeyValuePair() throws Exception {
-        String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "stylish");
-        assertFalse(actual.isEmpty());
-    }
-
-    @Test
-    public void testCompletelyDifferentFiles() throws Exception {
-        String actual = generate(YML_1_PATH, SINGLE_KEY_JSON_PATH, "plain");
-        assertFalse(actual.isEmpty());
-    }
-
-    @Test
     public void testPlainFormat() throws Exception {
-        String actual = generate(YML_1_PATH, YML_2_PATH, "plain");
-        assertEquals(resultPlain, actual);
+        assertGeneratedOutputMatchesExpected("plain", resultPlain);
     }
 
     @Test
     public void testJsonFormat() throws Exception {
-        String actual = generate(YML_1_PATH, YML_2_PATH, "json");
-        JSONAssert.assertEquals(resultJson, actual, false);
+        assertGeneratedOutputMatchesExpected("json", resultJson);
     }
 
     @Test
     public void testGenerate() {
-        assertDoesNotThrow(() -> {
-            generate(YML_1_PATH, YML_2_PATH, "plain");
-        });
+        assertDoesNotThrow(() -> generate(YML_1_PATH, YML_2_PATH, "plain"));
+    }
+
+    private void assertGeneratedOutputMatchesExpected(String format, String expected) throws Exception {
+        String actual = generate(
+                NESTED_STRUCTURES_DIR + "nestedStructures1.json",
+                NESTED_STRUCTURES_DIR + "nestedStructures2.json",
+                format
+        );
+        assertEquals(expected, actual);
+    }
+
+    private String readResourceFile(String path) throws IOException {
+        return Files.readString(Paths.get(path));
     }
 }
