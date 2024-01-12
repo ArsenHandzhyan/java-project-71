@@ -46,8 +46,8 @@ public final class DifferTest {
     @Test
     public void testNestedStructuresPlainFormat() throws Exception {
         String actual = generate(
-                "src/test/resources/fixtures/nestedStructures1.yml",
-                "src/test/resources/fixtures/nestedStructures2.yml",
+                "src/test/resources/fixtures/nestedStructures1.json",
+                "src/test/resources/fixtures/nestedStructures2.json",
                 "plain");
         String expected = Files.readString(Paths.get(
                 "src/test/resources/fixtures/nestedStructuresPlainResult.txt"));
@@ -57,8 +57,8 @@ public final class DifferTest {
     @Test
     public void testNestedStructuresStylishFormat() throws Exception {
         String actual = generate(
-                "src/test/resources/fixtures/nestedStructures1.yml",
-                "src/test/resources/fixtures/nestedStructures2.yml",
+                "src/test/resources/fixtures/nestedStructures1.json",
+                "src/test/resources/fixtures/nestedStructures2.json",
                 "stylish");
         String expected = Files.readString(Paths.get(
                 "src/test/resources/fixtures/nestedStructuresStylishResult.txt"));
@@ -68,8 +68,8 @@ public final class DifferTest {
     @Test
     public void testNestedStructuresJsonFormat() throws Exception {
         String actual = generate(
-                "src/test/resources/fixtures/nestedStructures1.yml",
-                "src/test/resources/fixtures/nestedStructures2.yml",
+                "src/test/resources/fixtures/nestedStructures1.json",
+                "src/test/resources/fixtures/nestedStructures2.json",
                 "json");
         String expected = Files.readString(Paths.get(
                 "src/test/resources/fixtures/nestedStructuresJsonResult.json"));

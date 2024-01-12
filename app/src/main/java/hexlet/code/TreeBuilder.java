@@ -9,8 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TreeBuilder {
-    private record DifferenceParams(String key, Object oldValue, Object newValue, Map<String, Object> map1,
-                                    Map<String, Object> map2, List<Map<String, Object>> difference) {
+    private record DifferenceParams(String key, Object oldValue, Object newValue) {
     }
 
     public static List<Map<String, Object>> buildTree(Map<String, Object> map1, Map<String, Object> map2) {
@@ -24,35 +23,36 @@ public class TreeBuilder {
             Object oldValue = formatStringValues(map1.get(key));
             Object newValue = formatStringValues(map2.get(key));
 
-            compareAndAddDifference(new DifferenceParams(key, oldValue, newValue, map1, map2, difference));
+            compareAndAddDifference(new DifferenceParams(key, oldValue, newValue), map1, map2, difference);
         }
 
         return difference;
     }
 
-    private static void compareAndAddDifference(DifferenceParams params) {
+    private static void compareAndAddDifference(DifferenceParams params,
+                                                Map<String, Object> map1,
+                                                Map<String, Object> map2,
+                                                List<Map<String, Object>> difference) {
         Map<String, Object> change = new HashMap<>();
-        String key = (String) formatStringValues(params.key);
-        if (!params.map2.containsKey(params.key)) {
-            change.put("key", key);
+        if (!map2.containsKey(params.key)) {
+            change.put("key", params.key);
             change.put("type", "removed");
             change.put("value", params.oldValue);
-        } else if (!params.map1.containsKey(params.key)) {
-            change.put("key", key);
+        } else if (!map1.containsKey(params.key)) {
+            change.put("key", params.key);
             change.put("type", "added");
             change.put("value", params.newValue);
         } else if (!Objects.equals(params.newValue, params.oldValue)) {
-            change.put("key", key);
+            change.put("key", params.key);
             change.put("type", "updated");
             change.put("newValue", params.newValue);
             change.put("oldValue", params.oldValue);
         } else {
-            change.put("key", key);
+            change.put("key", params.key);
             change.put("type", "unchanged");
             change.put("value", params.oldValue);
         }
-
-        params.difference.add(change);
+        difference.add(change);
     }
 
     public static Object formatStringValues(Object value) {

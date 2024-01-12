@@ -1,5 +1,0 @@
-nested:
-  key: another_value
-  inner:
-    prop1: 456
-    prop3: "hello"

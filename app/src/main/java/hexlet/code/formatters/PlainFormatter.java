@@ -9,7 +9,7 @@ public class PlainFormatter {
         StringBuilder formatted = new StringBuilder();
 
         for (Map<String, Object> entry : diff) {
-            String name = (String) entry.get("key");
+            String name = "'" + entry.get("key") + "'";
             String changeType = (String) entry.get("type");
             String formattedValue = getFormattedValue(entry.get("value"));
             String formattedOldValue = getFormattedValue(entry.get("oldValue"));
@@ -21,21 +21,18 @@ public class PlainFormatter {
                             name, formattedValue));
                     break;
                 case "removed":
-                    formatted.append(String.format("Property %s was removed%n",
-                            name));
+                    formatted.append(String.format("Property %s was removed%n", name));
                     break;
                 case "updated":
                     formatted.append(String.format("Property %s was updated. From %s to %s%n",
                             name, formattedOldValue, formattedNewValue));
                     break;
-                case "unchanged":
-                    // don't use in this formatter
+                case "unchanged": // don't use in this formatter
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown change type: " + changeType);
             }
         }
-
         return formatted.toString().trim();
     }
 

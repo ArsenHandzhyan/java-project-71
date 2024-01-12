@@ -2,12 +2,12 @@ setting1: Some value
 setting2: 200
 setting3: true
 key1: value1
-numbers1: 
+numbers1:
   - 1
   - 2
   - 3
   - 4
-numbers2: [2, 3, 4, 5]
+numbers2: [ 2, 3, 4, 5 ]
 id: 45
 default: null
 checked: false
@@ -19,4 +19,4 @@ chars1:
   - a
   - b
   - c
-chars2: ["d", "e", "f"]
+chars2: [ "d", "e", "f" ]
